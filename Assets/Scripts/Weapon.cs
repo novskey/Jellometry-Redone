@@ -5,7 +5,7 @@ public interface IWeapon
 
     void Fire();
 
-    double FireDelay
+    float FireDelay
     {
         get; set;
     }
