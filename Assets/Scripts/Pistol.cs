@@ -7,7 +7,7 @@ public class Pistol : MonoBehaviour, IWeapon
     private int _damage = 10;
     private float _velocity = 20f;
     private bool _ready = true;
-    public Rigidbody Projectile;
+    public Rigidbody Bullet;
 
     // Use this for initialization
     void Start ()
@@ -19,7 +19,8 @@ public class Pistol : MonoBehaviour, IWeapon
     {
         if (_ready)
         {
-            Rigidbody projClone = (Rigidbody) Instantiate(Projectile, transform.position, transform.rotation);
+            Rigidbody projClone = (Rigidbody) Instantiate(Bullet, transform.position, transform.rotation);
+            projClone.GetComponent<Projectile>().SendMessage("SetDamage",_damage);
             projClone.velocity = transform.forward*_velocity;
             _ready = false;
             StartCoroutine(Wait(FireDelay));
