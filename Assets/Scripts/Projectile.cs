@@ -49,7 +49,11 @@ public class Projectile : MonoBehaviour
         float y = Random.rotation.y * 100;
         float z = Random.rotation.z * 100;
 
-        GameObject splat = (GameObject) Instantiate(GameObject.Find("Splat"), transform.position, Quaternion.Euler(90, y, z));
+        GameObject splat = (GameObject) Instantiate(GameObject.Find("Splat"), transform.position, Quaternion.Euler(135, y, z));
+
+        splat.transform.position = transform.position;
+        splat.transform.forward = -collision.contacts[0].normal;
+        splat.transform.Rotate(45,0,0);
 
         Destroy(gameObject);
 

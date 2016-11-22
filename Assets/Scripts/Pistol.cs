@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pistol : MonoBehaviour, IWeapon
 {
     private int _damage = 10;
-    private float _velocity = 20f;
+    public float _velocity = 500f;
     private bool _ready = true;
     public Rigidbody Bullet;
 
@@ -22,6 +22,7 @@ public class Pistol : MonoBehaviour, IWeapon
             Rigidbody projClone = (Rigidbody) Instantiate(Bullet, transform.position, transform.rotation);
             projClone.GetComponent<Projectile>().SendMessage("SetDamage",_damage);
             projClone.velocity = transform.forward*_velocity;
+            Destroy(projClone,10);
             _ready = false;
             StartCoroutine(Wait(FireDelay));
         }
