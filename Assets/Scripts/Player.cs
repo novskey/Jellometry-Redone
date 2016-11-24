@@ -7,22 +7,13 @@ namespace Assets.Scripts
 
         private float _health = 100;
 
-        public float Speed = 0f;
+        public float Speed = 5f;
 
         public IWeapon Weapon;
 
         // Use this for initialization
         void Start ()
         {
-            Weapon = GameObject.Find("pistol").GetComponent<Pistol>();
-        }
-
-        // Update is called once per frame
-        void Update () {
-            if (Input.GetButton("Fire1"))
-            {
-                Weapon.Fire();
-            }
         }
 
         void AddModifier(Mod modifier)
@@ -31,15 +22,37 @@ namespace Assets.Scripts
             {
                 case "hp":
                     Debug.Log(_health);
-                    _health = (int)(_health * modifier.Modifier);
+
+                    if (modifier.Type == "direct")
+                    {
+                        _health += modifier.Modifier;
+                    }
+                    else
+                    {
+                        _health = (int)(_health * modifier.Modifier);
+                    }
+
                     Debug.Log(_health);
                     break;
                 case "firerate":
-                    Weapon.FireDelay = (float) (Weapon.FireDelay*modifier.Modifier);
+                    Debug.Log(Weapon.FireDelay);
+                    if (modifier.Type == "direct")
+                    {
+                        Weapon.FireDelay -= modifier.Modifier;
+                    }else{
+                        Weapon.FireDelay /= modifier.Modifier;
+                    }
                     Debug.Log(Weapon.FireDelay);
                     break;
                 case "speed":
-                    Speed = (int) (Speed * modifier.Modifier);
+                    Debug.Log(Speed);
+                    if (modifier.Type == "direct")
+                    {
+                        Speed += modifier.Modifier;
+                    }else{
+                        Speed *= modifier.Modifier;
+                    }
+                    Debug.Log(Speed);
                     break;
             }
         }
@@ -49,8 +62,38 @@ namespace Assets.Scripts
             switch (modifier.Target)
             {
                 case "hp":
-                    _health = (int)(_health / modifier.Modifier);
                     Debug.Log(_health);
+
+                    if (modifier.Type == "direct")
+                    {
+                        _health -= modifier.Modifier;
+                    }
+                    else
+                    {
+                        _health = (int)(_health / modifier.Modifier);
+                    }
+
+                    Debug.Log(_health);
+                    break;
+                case "firerate":
+                    Debug.Log(Weapon.FireDelay);
+                    if (modifier.Type == "direct")
+                    {
+                        Weapon.FireDelay += modifier.Modifier;
+                    }else{
+                        Weapon.FireDelay *= modifier.Modifier;
+                    }
+                    Debug.Log(Weapon.FireDelay);
+                    break;
+                case "speed":
+                    Debug.Log(Speed);
+                    if (modifier.Type == "direct")
+                    {
+                        Speed -= modifier.Modifier;
+                    }else{
+                        Speed /= modifier.Modifier;
+                    }
+                    Debug.Log(Speed);
                     break;
             }
         }

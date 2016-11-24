@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Pistol : MonoBehaviour, IWeapon
+public class Pistol : MonoBehaviour,IWeapon
 {
-    private int _damage = 10;
     public float _velocity = 500f;
     private bool _ready = true;
     private Rigidbody _bullet;
@@ -21,12 +20,19 @@ public class Pistol : MonoBehaviour, IWeapon
         if (_ready)
         {
             Rigidbody projClone = (Rigidbody) Instantiate(_bullet, transform.position, transform.rotation);
-            projClone.GetComponent<Projectile>().SendMessage("SetDamage", _damage);
+            projClone.GetComponent<Projectile>().SendMessage("SetDamage", Damage);
             projClone.velocity = transform.forward * _velocity;
             Destroy(projClone, 10);
             _ready = false;
             StartCoroutine(Wait(FireDelay));
         }
+    }
+
+    public float FireDelay { get; set; }
+    public float Damage { get; set; }
+
+    public void NotFiring()
+    {
     }
 
     private IEnumerator Wait(float delay)
@@ -35,6 +41,5 @@ public class Pistol : MonoBehaviour, IWeapon
         _ready = true;
     }
 
-    public float FireDelay { get; set; }
 
 }

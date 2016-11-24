@@ -115,7 +115,7 @@ public class Decal : MonoBehaviour {
                 //Debug.Log("Mask test: " + (r.gameObject.layer & (affectedLayers.value >> 2)));
             }
             */
-			if( !IsLayerContains(affectedLayers, r.gameObject.layer) ) continue;
+			if( !IsLayerContains(affectedLayers, r.gameObject.layer) || r.gameObject.tag == "Player") continue;
 			if( r.GetComponent<Decal>() != null ) continue;
 			
 			if( bounds.Intersects(r.bounds) ) {

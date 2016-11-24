@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts;
-using UnityEngine.Experimental.Director;
 
 public class Projectile : MonoBehaviour
 {
@@ -25,7 +23,6 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.gameObject.tag);
         if (other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<Player>().ApplyDamage(_damage);
@@ -51,12 +48,18 @@ public class Projectile : MonoBehaviour
 
         GameObject splat = (GameObject) Instantiate(Resources.Load<GameObject>("Prefabs/Splat"), transform.position, Quaternion.Euler(135, y, z));
 
+
+
+
+
+
+
         splat.transform.position = transform.position;
         splat.transform.forward = -collision.contacts[0].normal;
         splat.transform.Rotate(45,0,0);
 
         Destroy(gameObject);
 
-        GameObject.Find("DecalManager").GetComponent<DecalManager>().addDecal(splat);
+        GameObject.Find("DecalManager").GetComponent<DecalManager>().AddDecal(splat);
     }
 }

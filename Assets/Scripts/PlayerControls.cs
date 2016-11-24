@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Runtime.CompilerServices;
 using Assets.Scripts;
 
 public class PlayerControls : MonoBehaviour
@@ -37,8 +35,16 @@ public class PlayerControls : MonoBehaviour
             }
             if (Input.GetKey("space") || Input.GetButton("Fire1"))
             {
-                _player.Weapon.Fire();
+                if (_player.Weapon != null)
+                {
+                    _player.Weapon.Fire();
+                }
             }
         }
-    }
+
+	    if (_player.Weapon != null && _player.transform.GetChild(1).GetComponent<Laser>() != null && !Input.GetButton("Fire1"))
+	    {
+	        _player.Weapon.NotFiring();
+	    }
+	}
 }
