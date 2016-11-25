@@ -6,24 +6,21 @@ public class Laser : MonoBehaviour, IWeapon
 
     private LineRenderer _laser;
 
-    private bool firing;
+    private bool _firing;
 
     private void Start()
     {
+        Ready = true;
         _laser = GetComponent<LineRenderer>();
         _laser.SetVertexCount(2);
 
         Damage = 5;
-        FireDelay = 0.5f;
+        FireDelay = 0.3f;
     }
-
-    private int _health = 200;
-
-    private bool _ready = true;
 
     public void Fire()
     {
-        firing = true;
+        _firing = true;
         RaycastHit hit;
 
         if (Physics.Raycast(transform.position, transform.forward, out hit))
@@ -31,35 +28,39 @@ public class Laser : MonoBehaviour, IWeapon
             _laser.SetPosition(0, transform.position);
             _laser.SetPosition(1, hit.point);
 
-            if (_ready)
+            if (Ready)
             {
-                Debug.Log(_health -= (int) Damage);
-                _ready = false;
+                if (hit.transform.gameObject.tag == "Enemy")
+                {
+                    hit.transform.gameObject.SendMessage("ApplyDamage",Damage);
+                }
+                Ready = false;
                 StartCoroutine(Wait(FireDelay));
             }
         }
         else
         {
-            firing = false;
+            _firing = false;
         }
     }
 
     private IEnumerator Wait(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _ready = true;
+        Ready = true;
     }
 
     private void Update()
     {
-        _laser.enabled = firing;
+        _laser.enabled = _firing;
     }
 
     public float FireDelay { get; set; }
     public float Damage { get; set; }
+    public bool Ready { get; set; }
 
     public void NotFiring()
     {
-        firing = false;
+        _firing = false;
     }
 }

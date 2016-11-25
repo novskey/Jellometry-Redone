@@ -6,39 +6,31 @@ public class Projectile : MonoBehaviour
 
     private float _damage;
 
-	// Use this for initialization
-	void Start () {
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    void SetDamage(float damage)
+    public void SetDamage(float damage)
     {
         _damage = damage;
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        if (other.gameObject == gameObject.transform.parent.parent.gameObject) return;
         if (other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<Player>().ApplyDamage(_damage);
         }else if (other.gameObject.tag == "Enemy")
         {
+            Debug.Log("Enemy hit");
             other.gameObject.GetComponent<EnemyHealth>().ApplyDamage(_damage);
         }else if (other.gameObject.tag == "Decal")
         {
             Destroy(other.gameObject);
-
             CreateSplat(other);
         }else
         {
             CreateSplat(other);
         }
 
+        Destroy(gameObject);
     }
 
     void CreateSplat(Collision collision)
@@ -48,17 +40,9 @@ public class Projectile : MonoBehaviour
 
         GameObject splat = (GameObject) Instantiate(Resources.Load<GameObject>("Prefabs/Splat"), transform.position, Quaternion.Euler(135, y, z));
 
-
-
-
-
-
-
         splat.transform.position = transform.position;
         splat.transform.forward = -collision.contacts[0].normal;
         splat.transform.Rotate(45,0,0);
-
-        Destroy(gameObject);
 
         GameObject.Find("DecalManager").GetComponent<DecalManager>().AddDecal(splat);
     }

@@ -3,43 +3,51 @@ using UnityEngine;
 
 public class Pistol : MonoBehaviour,IWeapon
 {
-    public float _velocity = 500f;
-    private bool _ready = true;
+    private float _velocity = 70f;
     private Rigidbody _bullet;
 
     // Use this for initialization
     void Start ()
     {
+        Ready = true;
+
+        Damage = 10;
+
         FireDelay = 0.5f;
 
         _bullet = Resources.Load<Rigidbody>("Prefabs/bullet");
+        _bullet.GetComponent<Projectile>().SetDamage(Damage);
     }
 
     public void Fire()
     {
-        if (_ready)
+        if (Ready)
         {
             Rigidbody projClone = (Rigidbody) Instantiate(_bullet, transform.position, transform.rotation);
             projClone.GetComponent<Projectile>().SendMessage("SetDamage", Damage);
             projClone.velocity = transform.forward * _velocity;
+            projClone.transform.parent = transform;
             Destroy(projClone, 10);
-            _ready = false;
+            Ready = false;
             StartCoroutine(Wait(FireDelay));
         }
     }
 
     public float FireDelay { get; set; }
     public float Damage { get; set; }
+    public bool Ready { get; set; }
 
     public void NotFiring()
     {
     }
 
+
     private IEnumerator Wait(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _ready = true;
+        Ready = true;
     }
+
 
 
 }

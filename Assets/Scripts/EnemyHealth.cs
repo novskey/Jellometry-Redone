@@ -6,9 +6,14 @@ public class EnemyHealth : MonoBehaviour {
 
     public void ApplyDamage(float damage)
     {
+        Debug.Log(this + " got hit for " + damage);
         if (_health - damage <= 0)
         {
-            _health = 0;
+            Destroy(gameObject);
+        }
+        else
+        {
+            _health -= damage;
         }
     }
 }
