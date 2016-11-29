@@ -23,7 +23,7 @@ public class Sniper : MonoBehaviour, IWeapon {
     {
         RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward);
 
-        if (hits.Length != 0)
+        if (hits.Length != 0 && !_firing)
         {
             for (int i = 0; i < hits.Length; i++)
             {
