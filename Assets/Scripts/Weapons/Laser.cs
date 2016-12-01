@@ -10,7 +10,7 @@ public class Laser : MonoBehaviour, IWeapon
 
     private bool _firing;
 
-    private int _penetration = 1;
+    private int _penetration = 2;
 
     private void Start()
     {
@@ -35,46 +35,51 @@ public class Laser : MonoBehaviour, IWeapon
 
             RaycastHit last = new RaycastHit();
 
-            if (Ready)
-            {
-                int penetrated = 0;
+            int penetrated = 0;
 
-                foreach (RaycastHit raycastHit in hits)
+            bool readyThisLoop = Ready;
+
+            bool firedThisLoop = false;
+
+            foreach (RaycastHit raycastHit in hits)
+            {
+                if (raycastHit.transform.gameObject.tag == "Enemy" ||
+                    raycastHit.transform.gameObject.tag == "Shrine" && Ready)
                 {
-                    if (raycastHit.transform.gameObject.tag == "Enemy" ||
-                        raycastHit.transform.gameObject.tag == "Shrine")
+                    if (readyThisLoop)
                     {
                         raycastHit.transform.gameObject.SendMessage("ApplyDamage", Damage);
-                        penetrated++;
+                        firedThisLoop = true;
                     }
-                    else if (raycastHit.transform.gameObject.tag == "Obstacle")
-                    {
-                        last = raycastHit;
-                        break;
-                    }
-
-                    Debug.Log("Penetrated " + penetrated + " out of " + _penetration);
-                    if (penetrated >= _penetration)
-                    {
-                        Debug.Log("max penetration");
-                        Debug.Log(raycastHit.transform.gameObject);
-                        _laser.SetPosition(1, raycastHit.point);
-                        break;
-                    }
+                    penetrated++;
                 }
+                else if (raycastHit.transform.gameObject.tag == "Obstacle")
+                {
+                    last = raycastHit;
+                    break;
+                }
+
+                if (penetrated >= _penetration)
+                {
+                    last = raycastHit;
+                    _laser.SetPosition(1, raycastHit.point);
+                    break;
+                }
+            }
+
+            if (firedThisLoop)
+            {
                 Ready = false;
                 StartCoroutine(Wait(FireDelay));
             }
+
+            if (last.Equals(new RaycastHit()))
+            {
+                _laser.SetPosition(1, hits.Last().point);
+            }
             else
             {
-                if (last.Equals(new RaycastHit()))
-                {
-                    _laser.SetPosition(1, hits.Last().point);
-                }
-                else
-                {
-                    _laser.SetPosition(1,last.point);
-                }
+                _laser.SetPosition(1,last.point);
             }
         }
         else
