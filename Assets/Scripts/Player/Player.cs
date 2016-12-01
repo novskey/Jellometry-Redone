@@ -7,13 +7,24 @@ namespace Assets.Scripts
 
         private float _health = 100;
 
-        public float Speed = 5f;
+        public float Speed = 7f;
 
         public IWeapon Weapon;
+
+        public bool StartWithPistol;
 
         // Use this for initialization
         void Start ()
         {
+            if (StartWithPistol)
+            {
+                var pistolObj = Instantiate(Resources.Load<GameObject>("Prefabs/Weapons/pistol"));
+                pistolObj.transform.SetParent(transform);
+                pistolObj.transform.position = transform.FindChild("firePoint").position;
+                pistolObj.transform.rotation = new Quaternion(0,0,0,0);
+
+                Weapon = pistolObj.GetComponent<IWeapon>();
+            }
         }
 
         void AddModifier(Mod modifier)

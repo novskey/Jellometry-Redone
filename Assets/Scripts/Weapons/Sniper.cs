@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Linq;
 
@@ -7,6 +8,8 @@ public class Sniper : MonoBehaviour, IWeapon {
     private LineRenderer _laser;
 
     private bool _firing;
+
+    private int _penetration = 2;
 
     private void Start()
     {
@@ -21,20 +24,29 @@ public class Sniper : MonoBehaviour, IWeapon {
 
     public void Fire()
     {
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward);
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward).OrderBy(h=>h.distance).ToArray();
 
         if (hits.Length != 0 && !_firing)
         {
+            int penetrated = 0;
             for (int i = 0; i < hits.Length; i++)
             {
+
                 if (hits[i].transform.gameObject.tag == "Obstacle")
                 {
                     _laser.SetPosition(1, hits[i].point);
                     break;
                 }
-                if (hits[i].transform.gameObject.tag == "Enemy" && Ready)
+                if ((hits[i].transform.gameObject.tag == "Enemy" || hits[i].transform.gameObject.tag == "Shrine") && Ready)
                 {
                     hits[i].transform.gameObject.SendMessage("ApplyDamage",Damage);
+                    penetrated++;
+                }
+
+                if (penetrated >= _penetration)
+                {
+                    _laser.SetPosition(1, hits[i].point);
+                    break;
                 }
 
                 if (i == hits.Length - 1)

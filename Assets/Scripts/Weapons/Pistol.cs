@@ -25,8 +25,8 @@ public class Pistol : MonoBehaviour,IWeapon
         {
             Rigidbody projClone = (Rigidbody) Instantiate(_bullet, transform.position, transform.rotation);
             projClone.GetComponent<Projectile>().SendMessage("SetDamage", Damage);
+            projClone.GetComponent<Projectile>().SendMessage("SetOwner",transform.parent);
             projClone.velocity = transform.forward * _velocity;
-            projClone.transform.parent = transform;
             Destroy(projClone, 10);
             Ready = false;
             StartCoroutine(Wait(FireDelay));

@@ -5,6 +5,7 @@ public class Projectile : MonoBehaviour
 {
 
     private float _damage;
+    private Transform _owner;
 
     public void SetDamage(float damage)
     {
@@ -13,24 +14,32 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject == gameObject.transform.parent.parent.gameObject) return;
+        if (other.transform == _owner) return;
         if (other.gameObject.tag == "Player")
         {
-            other.gameObject.GetComponent<Player>().ApplyDamage(_damage);
+            other.gameObject.SendMessage("ApplyDamage",_damage);
         }else if (other.gameObject.tag == "Enemy")
         {
             Debug.Log("Enemy hit");
-            other.gameObject.GetComponent<EnemyHealth>().ApplyDamage(_damage);
+            other.gameObject.SendMessage("ApplyDamage",_damage);
         }else if (other.gameObject.tag == "Decal")
         {
             Destroy(other.gameObject);
             CreateSplat(other);
+        }else if (other.gameObject.tag == "Shrine")
+        {
+            other.gameObject.SendMessage("ApplyDamage",_damage);
         }else
         {
             CreateSplat(other);
         }
 
         Destroy(gameObject);
+    }
+
+    void SetOwner(Transform owner)
+    {
+        this._owner = owner;
     }
 
     void CreateSplat(Collision collision)
@@ -45,5 +54,10 @@ public class Projectile : MonoBehaviour
         splat.transform.Rotate(45,0,0);
 
         GameObject.Find("DecalManager").GetComponent<DecalManager>().AddDecal(splat);
+    }
+
+    public Transform GetOwner()
+    {
+        return _owner;
     }
 }

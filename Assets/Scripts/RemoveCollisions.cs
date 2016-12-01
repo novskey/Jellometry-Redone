@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class RemoveCollions : MonoBehaviour {
+public class RemoveCollisions : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -14,9 +14,6 @@ public class RemoveCollions : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.name != "Player")
-        {
-            Destroy(other.gameObject);
-        }
+        Destroy(other.gameObject);
     }
 }

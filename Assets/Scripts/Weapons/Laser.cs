@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class Laser : MonoBehaviour, IWeapon
 {
@@ -7,6 +9,8 @@ public class Laser : MonoBehaviour, IWeapon
     private LineRenderer _laser;
 
     private bool _firing;
+
+    private int _penetration = 1;
 
     private void Start()
     {
@@ -21,21 +25,56 @@ public class Laser : MonoBehaviour, IWeapon
     public void Fire()
     {
         _firing = true;
-        RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit))
+        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward).OrderBy(h=>h.distance).ToArray();
+
+        if (hits.Length > 0)
         {
+
             _laser.SetPosition(0, transform.position);
-            _laser.SetPosition(1, hit.point);
+
+            RaycastHit last = new RaycastHit();
 
             if (Ready)
             {
-                if (hit.transform.gameObject.tag == "Enemy")
+                int penetrated = 0;
+
+                foreach (RaycastHit raycastHit in hits)
                 {
-                    hit.transform.gameObject.SendMessage("ApplyDamage",Damage);
+                    if (raycastHit.transform.gameObject.tag == "Enemy" ||
+                        raycastHit.transform.gameObject.tag == "Shrine")
+                    {
+                        raycastHit.transform.gameObject.SendMessage("ApplyDamage", Damage);
+                        penetrated++;
+                    }
+                    else if (raycastHit.transform.gameObject.tag == "Obstacle")
+                    {
+                        last = raycastHit;
+                        break;
+                    }
+
+                    Debug.Log("Penetrated " + penetrated + " out of " + _penetration);
+                    if (penetrated >= _penetration)
+                    {
+                        Debug.Log("max penetration");
+                        Debug.Log(raycastHit.transform.gameObject);
+                        _laser.SetPosition(1, raycastHit.point);
+                        break;
+                    }
                 }
                 Ready = false;
                 StartCoroutine(Wait(FireDelay));
+            }
+            else
+            {
+                if (last.Equals(new RaycastHit()))
+                {
+                    _laser.SetPosition(1, hits.Last().point);
+                }
+                else
+                {
+                    _laser.SetPosition(1,last.point);
+                }
             }
         }
         else
