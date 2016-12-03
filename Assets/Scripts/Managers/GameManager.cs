@@ -7,18 +7,38 @@ public class GameManager : MonoBehaviour
 {
 
     public Text scoreText;
+    public Text TimeText;
     private int _score;
+    private float startTime;
 
-	// Use this for initialization
+    // Use this for initialization
 	void Start () {
 	    _score = 0;
+
+	    startTime = Time.time;
 	    UpdateScore ();
+	    UpdateTime();
 	}
-	
-	// Update is called once per frame
+
+    private void UpdateTime()
+    {
+        float time = Time.time - startTime;
+
+        string minutes = Mathf.Floor(time / 60).ToString("00");
+        string seconds = Mathf.Floor(time % 60).ToString("00");
+
+        TimeText.text = minutes + ":" + seconds;
+    }
+
+    // Update is called once per frame
 	void Update () {
 	
 	}
+
+    private void FixedUpdate()
+    {
+        UpdateTime();
+    }
 
     void UpdateScore ()
     {
