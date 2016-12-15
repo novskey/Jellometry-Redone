@@ -5,6 +5,8 @@ public class SniperPickUp : PickUp.WeaponPickUp {
 
 	// Use this for initialization
 	void Start () {
-	    Weapon = Instantiate(Resources.Load<GameObject>("Prefabs/Weapons/sniper"));
+	    PrefabManager prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+
+	    Weapon = Instantiate(prefabManager.Get("sniper"));
 	}
 }

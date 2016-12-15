@@ -5,6 +5,8 @@ public class PistolPickUp : PickUp.WeaponPickUp {
 
     private void Start()
     {
-        Weapon = Instantiate(Resources.Load<GameObject>("Prefabs/Weapons/pistol"));
+        PrefabManager prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+
+        Weapon = Instantiate(prefabManager.Get("pistol"));
     }
 }

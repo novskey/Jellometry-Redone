@@ -1,9 +1,14 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public class AreaSpawner : MonoBehaviour
 {
     private Bounds[] _spawnAreas;
+
+    private PrefabManager _prefabManager;
 
     int _spawnCount = 0;
 
@@ -12,6 +17,7 @@ public class AreaSpawner : MonoBehaviour
 	{
 	    _spawnAreas = new Bounds[transform.childCount];
 
+	    _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
 
 	    for (int i = 0; i < transform.childCount; i++)
 	    {
@@ -22,14 +28,18 @@ public class AreaSpawner : MonoBehaviour
 	        }
 	    }
 
-        StartCoroutine(spawnEnemies());
+	    Dictionary<string, int> dict = new Dictionary<string, int> {{"enemyTest", 20}};
+	    StartCoroutine(SpawnEnemies(dict));
 	    }
 
-    private IEnumerator spawnEnemies()
+    public IEnumerator SpawnEnemies(Dictionary<string, int> enemies)
     {
-        for (int i = 0; i < 400; i++)
+        foreach (KeyValuePair<string,int> kvPair in enemies)
         {
-            Instantiate(GameObject.Find("enemyTest"),RandomPoint(),transform.rotation);
+            for (int i = 0; i < kvPair.Value; i++)
+            {
+                Instantiate(_prefabManager.Get(kvPair.Key),RandomPoint(),transform.rotation);
+            }
         }
         yield break;
     }

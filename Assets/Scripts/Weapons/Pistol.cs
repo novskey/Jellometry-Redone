@@ -9,14 +9,17 @@ public class Pistol : MonoBehaviour,IWeapon
     // Use this for initialization
     void Start ()
     {
+
+        PrefabManager prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+
+        _bullet = prefabManager.Get("bullet").GetComponent<Rigidbody>();
+        _bullet.GetComponent<Projectile>().SetDamage(Damage);
+
         Ready = true;
 
         Damage = 10;
 
         FireDelay = 0.5f;
-
-        _bullet = Resources.Load<Rigidbody>("Prefabs/bullet");
-        _bullet.GetComponent<Projectile>().SetDamage(Damage);
     }
 
     public void Fire()

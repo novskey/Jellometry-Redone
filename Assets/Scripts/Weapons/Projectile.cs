@@ -1,11 +1,22 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Assets.Scripts;
+using Random = UnityEngine.Random;
 
 public class Projectile : MonoBehaviour
 {
 
     private float _damage;
     private Transform _owner;
+
+    private PrefabManager _prefabManager;
+    private GameObject _splatObj;
+
+    private void Start()
+    {
+        _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+        _splatObj = _prefabManager.Get("Splat");
+    }
 
     public void SetDamage(float damage)
     {
@@ -14,6 +25,7 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
+        Debug.Log(other.transform);
         if (other.transform == _owner) return;
         if (other.gameObject.tag == "Player")
         {
@@ -37,9 +49,10 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void SetOwner(Transform owner)
+    public void SetOwner(Transform owner)
     {
-        this._owner = owner;
+        _owner = owner;
+        Debug.Log("set owner to: " + owner);
     }
 
     void CreateSplat(Collision collision)
@@ -47,7 +60,7 @@ public class Projectile : MonoBehaviour
         float y = Random.rotation.y * 100;
         float z = Random.rotation.z * 100;
 
-        GameObject splat = (GameObject) Instantiate(Resources.Load<GameObject>("Prefabs/Splat"), transform.position, Quaternion.Euler(135, y, z));
+        GameObject splat = (GameObject) Instantiate(_splatObj, transform.position, Quaternion.Euler(135, y, z));
 
         splat.transform.position = transform.position;
         splat.transform.forward = -collision.contacts[0].normal;
