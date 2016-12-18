@@ -6,23 +6,20 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 
-    public Text scoreText;
+    public Text ScoreText;
     public Text TimeText;
     private int _score;
-    private float startTime;
+    private float _startTime;
+    private bool _gamestarted;
 
     // Use this for initialization
 	void Start () {
 	    _score = 0;
-
-	    startTime = Time.time;
-	    UpdateScore ();
-	    UpdateTime();
 	}
 
     private void UpdateTime()
     {
-        float time = Time.time - startTime;
+        float time = Time.time - _startTime;
 
         string minutes = Mathf.Floor(time / 60).ToString("00");
         string seconds = Mathf.Floor(time % 60).ToString("00");
@@ -37,17 +34,23 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        UpdateTime();
+        if (_gamestarted)
+        {
+            UpdateTime();
+        }
     }
 
     void UpdateScore ()
     {
-        scoreText.text = _score.ToString();
+        ScoreText.text = _score.ToString();
     }
 
     public void StartGame()
     {
-        Debug.Log("Start game");
+        _startTime = Time.time;
+        _gamestarted = true;
+        UpdateScore ();
+        UpdateTime();
     }
 
     public void EnemyKilled(EnemyType type)
@@ -72,7 +75,7 @@ public class GameManager : MonoBehaviour
         switch (enemyInfo.Type)
         {
             case EnemyType.Grunt:
-                points = 20 * enemyInfo.buffs;
+                points = 20 * enemyInfo.Buffs;
                 break;
         }
 
@@ -81,4 +84,5 @@ public class GameManager : MonoBehaviour
         _score += points;
         UpdateScore();
     }
+
 }

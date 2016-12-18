@@ -18,8 +18,8 @@ public class DecalEditor : Editor {
 		Decal[] decals = (Decal[]) GameObject.FindObjectsOfType( typeof(Decal) );
 		materials = new List<Material>();
 		foreach(Decal decal in decals) {
-			if(decal.material != null && !materials.Contains(decal.material)) {
-				materials.Add( decal.material );
+			if(decal.Material != null && !materials.Contains(decal.Material)) {
+				materials.Add( decal.Material );
 			}
 		}
 	}
@@ -27,27 +27,27 @@ public class DecalEditor : Editor {
 	public override void OnInspectorGUI() {
 		Decal decal = (Decal)target;
 
-		decal.material = DrawMaterialList( decal.material, materials );
-		decal.material = AssetField<Material>("Material", decal.material);
-		if( decal.material != null && !materials.Contains(decal.material) ) {
-			materials.Add( decal.material );
+		decal.Material = DrawMaterialList( decal.Material, materials );
+		decal.Material = AssetField<Material>("Material", decal.Material);
+		if( decal.Material != null && !materials.Contains(decal.Material) ) {
+			materials.Add( decal.Material );
 		}
 		EditorGUILayout.Separator();
 
-		if(decal.material != null && decal.material.mainTexture != null) {
-			decal.sprite = DrawSpriteList( decal.sprite, decal.material.mainTexture );
-			if(decal.sprite && decal.sprite.texture != decal.material.mainTexture) decal.sprite = null;
+		if(decal.Material != null && decal.Material.mainTexture != null) {
+			decal.Sprite = DrawSpriteList( decal.Sprite, decal.Material.mainTexture );
+			if(decal.Sprite && decal.Sprite.texture != decal.Material.mainTexture) decal.Sprite = null;
 		}
 		EditorGUILayout.Separator();
 
-		decal.maxAngle = EditorGUILayout.FloatField("Max Angle", decal.maxAngle);
-		decal.maxAngle = Mathf.Clamp(decal.maxAngle, 1, 180);
+		decal.MaxAngle = EditorGUILayout.FloatField("Max Angle", decal.MaxAngle);
+		decal.MaxAngle = Mathf.Clamp(decal.MaxAngle, 1, 180);
 
-		decal.pushDistance = EditorGUILayout.FloatField("Push Distance", decal.pushDistance);
-		decal.pushDistance = Mathf.Clamp( decal.pushDistance, 0.01f, 1 );
+		decal.PushDistance = EditorGUILayout.FloatField("Push Distance", decal.PushDistance);
+		decal.PushDistance = Mathf.Clamp( decal.PushDistance, 0.01f, 1 );
 		EditorGUILayout.Separator();
 
-		decal.affectedLayers = LayerMaskField("Affected Layers", decal.affectedLayers);
+		decal.AffectedLayers = LayerMaskField("Affected Layers", decal.AffectedLayers);
 
 		showAffectedObject = EditorGUILayout.Foldout(showAffectedObject, "Affected Objects");
 		if(showAffectedObject && affectedObjects != null) {
@@ -156,8 +156,8 @@ public class DecalEditor : Editor {
 		}
 		
 		Vector3 scale = decal.transform.localScale;
-		if(decal.sprite != null) {
-			float ratio = (float) decal.sprite.rect.width / decal.sprite.rect.height;
+		if(decal.Sprite != null) {
+			float ratio = (float) decal.Sprite.rect.width / decal.Sprite.rect.height;
 			if( oldScale.x != scale.x ) {
 				scale.y = scale.x / ratio;
 			} else
@@ -209,18 +209,18 @@ public class DecalEditor : Editor {
 		MeshFilter filter = decal.GetComponent<MeshFilter>();
 		if(filter == null) filter = decal.gameObject.AddComponent<MeshFilter>();
 		if(decal.GetComponent<Renderer>() == null) decal.gameObject.AddComponent<MeshRenderer>();
-		decal.GetComponent<Renderer>().material = decal.material;
+		decal.GetComponent<Renderer>().material = decal.Material;
 
-		if(decal.material == null || decal.sprite == null) {
+		if(decal.Material == null || decal.Sprite == null) {
 			filter.mesh = null;
 			return;
 		}
 
-		affectedObjects = GetAffectedObjects(decal.GetBounds(), decal.affectedLayers);
+		affectedObjects = GetAffectedObjects(decal.GetBounds(), decal.AffectedLayers);
 		foreach(GameObject go in affectedObjects) {
 			DecalBuilder.BuildDecalForObject( decal, go );
 		}
-		DecalBuilder.Push( decal.pushDistance );
+		DecalBuilder.Push( decal.PushDistance );
 
 		Mesh mesh = DecalBuilder.CreateMesh();
 		if(mesh != null) {

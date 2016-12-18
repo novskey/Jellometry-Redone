@@ -3,17 +3,17 @@ using System.Collections.Generic;
 
 public class DecalBuilder {
 
-	private static List<Vector3> bufVertices = new List<Vector3>();
-	private static List<Vector3> bufNormals = new List<Vector3>();
-	private static List<Vector2> bufTexCoords = new List<Vector2>();
-	private static List<int> bufIndices = new List<int>();
+	private static List<Vector3> _bufVertices = new List<Vector3>();
+	private static List<Vector3> _bufNormals = new List<Vector3>();
+	private static List<Vector2> _bufTexCoords = new List<Vector2>();
+	private static List<int> _bufIndices = new List<int>();
 
 
 	public static void BuildDecalForObject(Decal decal, GameObject affectedObject) {
 		Mesh affectedMesh = affectedObject.GetComponent<MeshFilter>().sharedMesh;
 		if(affectedMesh == null) return;
 
-		float maxAngle = decal.maxAngle;
+		float maxAngle = decal.MaxAngle;
 	
 		Plane right = new Plane( Vector3.right, Vector3.right/2f );
 		Plane left = new Plane( -Vector3.right, -Vector3.right/2f );
@@ -26,7 +26,7 @@ public class DecalBuilder {
 
 		Vector3[] vertices = affectedMesh.vertices;
 		int[] triangles = affectedMesh.triangles;
-		int startVertexCount = bufVertices.Count;
+		int startVertexCount = _bufVertices.Count;
 
 		Matrix4x4 matrix = decal.transform.worldToLocalMatrix * affectedObject.transform.localToWorldMatrix;
 
@@ -66,46 +66,46 @@ public class DecalBuilder {
 			AddPolygon( poly, normal );
 		}
 
-		if (decal.sprite)
-			GenerateTexCoords (startVertexCount, decal.sprite);
+		if (decal.Sprite)
+			GenerateTexCoords (startVertexCount, decal.Sprite);
 		else {
 			Sprite fakeSprite = new Sprite();
-			int textureWidth = decal.material.mainTexture.width;
-			int textureHeight = decal.material.mainTexture.height;
+			int textureWidth = decal.Material.mainTexture.width;
+			int textureHeight = decal.Material.mainTexture.height;
 			Texture2D textureData = new Texture2D(textureWidth,textureHeight);
 			fakeSprite = Sprite.Create(textureData, new Rect(0,0,textureWidth,textureHeight), new Vector2(textureWidth/2,textureHeight/2));
-			GenerateTexCoords (startVertexCount, decal.sprite);
+			GenerateTexCoords (startVertexCount, decal.Sprite);
 		}
 	}
 
 	private static void AddPolygon(DecalPolygon poly, Vector3 normal) {
-		int ind1 = AddVertex( poly.vertices[0], normal );
-		for(int i=1; i<poly.vertices.Count-1; i++) {
-			int ind2 = AddVertex( poly.vertices[i], normal );
-			int ind3 = AddVertex( poly.vertices[i+1], normal );
+		int ind1 = AddVertex( poly.Vertices[0], normal );
+		for(int i=1; i<poly.Vertices.Count-1; i++) {
+			int ind2 = AddVertex( poly.Vertices[i], normal );
+			int ind3 = AddVertex( poly.Vertices[i+1], normal );
 
-			bufIndices.Add( ind1 );
-			bufIndices.Add( ind2 );
-			bufIndices.Add( ind3 );
+			_bufIndices.Add( ind1 );
+			_bufIndices.Add( ind2 );
+			_bufIndices.Add( ind3 );
 		}
 	}
 
 	private static int AddVertex(Vector3 vertex, Vector3 normal) {
 		int index = FindVertex(vertex);
 		if(index == -1) {
-			bufVertices.Add( vertex );
-			bufNormals.Add( normal );
-			index = bufVertices.Count-1;
+			_bufVertices.Add( vertex );
+			_bufNormals.Add( normal );
+			index = _bufVertices.Count-1;
 		} else {
-			Vector3 t = bufNormals[ index ] + normal;
-			bufNormals[ index ] = t.normalized;
+			Vector3 t = _bufNormals[ index ] + normal;
+			_bufNormals[ index ] = t.normalized;
 		}
 		return (int) index;
 	}
 
 	private static int FindVertex(Vector3 vertex) {
-		for(int i=0; i<bufVertices.Count; i++) {
-			if( Vector3.Distance(bufVertices[i], vertex) < 0.01f ) {
+		for(int i=0; i<_bufVertices.Count; i++) {
+			if( Vector3.Distance(_bufVertices[i], vertex) < 0.01f ) {
 				return i;
 			}
 		}
@@ -119,41 +119,41 @@ public class DecalBuilder {
 		rect.width /= sprite.texture.width;
 		rect.height /= sprite.texture.height;
 		
-		for(int i=start; i<bufVertices.Count; i++) {
-			Vector3 vertex = bufVertices[i];
+		for(int i=start; i<_bufVertices.Count; i++) {
+			Vector3 vertex = _bufVertices[i];
 			
 			Vector2 uv = new Vector2(vertex.x+0.5f, vertex.y+0.5f);
 			uv.x = Mathf.Lerp( rect.xMin, rect.xMax, uv.x );
 			uv.y = Mathf.Lerp( rect.yMin, rect.yMax, uv.y );
 			
-			bufTexCoords.Add( uv );
+			_bufTexCoords.Add( uv );
 		}
 	}
 
 	public static void Push(float distance) {
-		for(int i=0; i<bufVertices.Count; i++) {
-			Vector3 normal = bufNormals[i];
-			bufVertices[i] += normal * distance;
+		for(int i=0; i<_bufVertices.Count; i++) {
+			Vector3 normal = _bufNormals[i];
+			_bufVertices[i] += normal * distance;
 		}
 	}
 
 
 	public static Mesh CreateMesh() {
-		if(bufIndices.Count == 0) {
+		if(_bufIndices.Count == 0) {
 			return null;
 		}
 		Mesh mesh = new Mesh();
 
-		mesh.vertices = bufVertices.ToArray();
-		mesh.normals = bufNormals.ToArray();
-		mesh.uv = bufTexCoords.ToArray();
-		mesh.uv2 = bufTexCoords.ToArray();
-		mesh.triangles = bufIndices.ToArray();
+		mesh.vertices = _bufVertices.ToArray();
+		mesh.normals = _bufNormals.ToArray();
+		mesh.uv = _bufTexCoords.ToArray();
+		mesh.uv2 = _bufTexCoords.ToArray();
+		mesh.triangles = _bufIndices.ToArray();
 
-		bufVertices.Clear();
-		bufNormals.Clear();
-		bufTexCoords.Clear();
-		bufIndices.Clear();
+		_bufVertices.Clear();
+		_bufNormals.Clear();
+		_bufTexCoords.Clear();
+		_bufIndices.Clear();
 
 		return mesh;
 	}

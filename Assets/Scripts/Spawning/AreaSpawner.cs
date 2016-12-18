@@ -29,7 +29,7 @@ public class AreaSpawner : MonoBehaviour
 	    }
 
 	    Dictionary<string, int> dict = new Dictionary<string, int> {{"enemyTest", 20}};
-	    StartCoroutine(SpawnEnemies(dict));
+//	    StartCoroutine(SpawnEnemies(dict));
 	    }
 
     public IEnumerator SpawnEnemies(Dictionary<string, int> enemies)
