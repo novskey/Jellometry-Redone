@@ -55,6 +55,6 @@ public class AreaSpawner : MonoBehaviour
         float x = Random.Range(bounds.min.x, bounds.max.x);
         float z = Random.Range(bounds.min.z, bounds.max.z);
 
-        return new Vector3(x,0.1f,z);
+        return new Vector3(x,1f,z);
     }
 }

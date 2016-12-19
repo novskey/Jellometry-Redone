@@ -12,9 +12,12 @@ public class GameManager : MonoBehaviour
     private float _startTime;
     private bool _gamestarted;
 
+    private WaveManager _waveManager;
+
     // Use this for initialization
-	void Start () {
-	    _score = 0;
+    void Start () {
+        _waveManager = GameObject.Find("WaveManager").GetComponent<WaveManager>();
+        _waveManager.WaveSetup();
 	}
 
     private void UpdateTime()

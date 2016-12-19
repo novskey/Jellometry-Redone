@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PrefabManager : MonoBehaviour
 {
@@ -17,5 +18,21 @@ public class PrefabManager : MonoBehaviour
         }
 
         return gameObject;
+    }
+
+    public GameObject[] GetShrines()
+    {
+        List<GameObject> shrines = new List<GameObject>();
+        foreach (GameObject prefab in Prefabs)
+        {
+            if (prefab == null) continue;
+
+            if (prefab.tag == "BossShrine")
+            {
+                shrines.Add(prefab);
+            }
+        }
+
+        return shrines.ToArray();
     }
 }

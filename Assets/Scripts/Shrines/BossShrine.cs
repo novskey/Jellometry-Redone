@@ -9,6 +9,8 @@ public class BossShrine : MonoBehaviour, IShrine
     public GameObject ActivatedModel;
     public GameObject Boss;
 
+    public BossReward Reward;
+
 	// Use this for initialization
 	void Start ()
 	{

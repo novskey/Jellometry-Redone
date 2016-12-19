@@ -11,8 +11,10 @@ public class StartShrine : MonoBehaviour, IShrine
     public GameObject ActivatedModel;
 
     // Use this for initialization
-	void Start () {
+	void Start ()
+	{
 
+	    Health = 30;
 	    DefaultModel.SetActive(true);
 	    ActivatedModel.SetActive(false);
 	}

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Pickups.Structure;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -31,7 +32,7 @@ namespace Assets.Scripts
         {
             switch (modifier.Target)
             {
-                case "hp":
+                case PlayerStat.Hp:
                     Debug.Log(_health);
 
                     if (modifier.Type == "direct")
@@ -45,7 +46,7 @@ namespace Assets.Scripts
 
                     Debug.Log(_health);
                     break;
-                case "firerate":
+                case PlayerStat.Attackspeed:
                     Debug.Log(Weapon.FireDelay);
                     if (modifier.Type == "direct")
                     {
@@ -55,7 +56,7 @@ namespace Assets.Scripts
                     }
                     Debug.Log(Weapon.FireDelay);
                     break;
-                case "speed":
+                case PlayerStat.Speed:
                     Debug.Log(Speed);
                     if (modifier.Type == "direct")
                     {
@@ -72,7 +73,7 @@ namespace Assets.Scripts
         {
             switch (modifier.Target)
             {
-                case "hp":
+                case PlayerStat.Hp:
                     Debug.Log(_health);
 
                     if (modifier.Type == "direct")
@@ -86,7 +87,7 @@ namespace Assets.Scripts
 
                     Debug.Log(_health);
                     break;
-                case "firerate":
+                case PlayerStat.Attackspeed:
                     Debug.Log(Weapon.FireDelay);
                     if (modifier.Type == "direct")
                     {
@@ -96,7 +97,7 @@ namespace Assets.Scripts
                     }
                     Debug.Log(Weapon.FireDelay);
                     break;
-                case "speed":
+                case PlayerStat.Speed:
                     Debug.Log(Speed);
                     if (modifier.Type == "direct")
                     {

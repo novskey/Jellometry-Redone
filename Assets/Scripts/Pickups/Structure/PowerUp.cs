@@ -1,16 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Assets.Scripts;
+using Assets.Scripts.Pickups.Structure;
 using UnityEngine;
 
-public class PowerUp
+public class PowerUp : MonoBehaviour
 {
-    private float _modifier;
+    public float Modifier;
 
-    private float _duration;
+    public float _duration;
 
-    private string _target;
+    public PlayerStat Target;
 
-    private string _type;
+    public string _type;
 
     private GameObject _playerObj;
 
@@ -18,11 +20,11 @@ public class PowerUp
 
     private Mod _mod;
 
-    public PowerUp(float modifier, string target, string type, float duration)
+    public PowerUp(float modifier, PlayerStat target, string type, float duration)
     {
-        _modifier = modifier;
+        Modifier = modifier;
         _duration = duration;
-        _target = target;
+        Target = target;
         _type = type;
     }
 
@@ -30,7 +32,7 @@ public class PowerUp
     {
         _playerObj = GameObject.Find("Player");
         _player = _playerObj.GetComponent<Player>();
-        _mod = new Mod(_target, _modifier, _type);
+        _mod = new Mod(Target, Modifier, _type);
         _player.SendMessage("AddModifier",_mod);
 
     }
@@ -42,4 +44,13 @@ public class PowerUp
         _player.SendMessage("RemoveModifier", _mod);
     }
 
+    public String Type()
+    {
+        return _type;
+    }
+
+    public float Duration()
+    {
+        return _duration;
+    }
 }
