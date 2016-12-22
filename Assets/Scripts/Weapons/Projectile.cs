@@ -38,9 +38,9 @@ public class Projectile : MonoBehaviour
         {
             Destroy(other.gameObject);
             CreateSplat(other);
-        }else if (other.gameObject.tag == "Shrine")
+        }else if (other.gameObject.tag == "DefaultShrine")
         {
-            other.gameObject.SendMessage("ApplyDamage",_damage);
+            other.transform.parent.SendMessage("ApplyDamage",_damage);
         }else
         {
             CreateSplat(other);

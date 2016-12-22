@@ -1,10 +1,12 @@
-﻿class Mod
+﻿using Assets.Scripts.Pickups.Structure;
+
+class Mod
 {
-    public string Target;
+    public PlayerStat Target;
     public float Modifier;
     public string Type;
 
-    public Mod(string target, float modifier, string type)
+    public Mod(PlayerStat target, float modifier, string type)
     {
         Target = target;
         Modifier = modifier;

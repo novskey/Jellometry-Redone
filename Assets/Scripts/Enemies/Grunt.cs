@@ -9,7 +9,7 @@ public class Grunt : MonoBehaviour, IEnemy
 	void Start ()
 	{
 	    Type = EnemyType.Grunt;
-	    buffs = 2;
+	    Buffs = 2;
 	}
 	
 	// Update is called once per frame
@@ -18,5 +18,5 @@ public class Grunt : MonoBehaviour, IEnemy
 	}
 
     public EnemyType Type { get; set; }
-    public int buffs { get; set; }
+    public int Buffs { get; set; }
 }

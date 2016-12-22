@@ -5,11 +5,11 @@ public class DecalManager : MonoBehaviour
 {
     private readonly List<GameObject> _decals = new List<GameObject>();
 
-    private int MaxDecals = 30;
+    private int _maxDecals = 30;
 
     public void AddDecal(GameObject decal)
     {
-        if (_decals.Count > MaxDecals)
+        if (_decals.Count > _maxDecals)
         {
             Destroy(_decals[0]);
             _decals.RemoveAt(0);

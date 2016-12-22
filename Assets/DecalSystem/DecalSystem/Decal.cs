@@ -5,16 +5,16 @@ using System.Collections.Generic;
 [RequireComponent( typeof(MeshRenderer) )]
 public class Decal : MonoBehaviour {
 
-	public Material material;
-	public Sprite sprite;
+	public Material Material;
+	public Sprite Sprite;
 
-	public float maxAngle = 90.0f;
-	public float pushDistance = 0.009f;
-	public LayerMask affectedLayers = -1;
-	private GameObject[] affectedObjects;
+	public float MaxAngle = 90.0f;
+	public float PushDistance = 0.009f;
+	public LayerMask AffectedLayers = -1;
+	private GameObject[] _affectedObjects;
 
-	private Matrix4x4 oldMatrix;
-	private Vector3 oldScale;
+	private Matrix4x4 _oldMatrix;
+	private Vector3 _oldScale;
 
 	void OnDrawGizmosSelected() {
 		Gizmos.matrix = transform.localToWorldMatrix;
@@ -56,9 +56,9 @@ public class Decal : MonoBehaviour {
 	void Update() {
 		// Only rebuild mesh when scaling
 		//bool hasChanged = oldMatrix != transform.localToWorldMatrix;
-		bool hasChanged = oldScale != transform.localScale;
+		bool hasChanged = _oldScale != transform.localScale;
 		//oldMatrix = transform.localToWorldMatrix;
-		oldScale = transform.localScale;
+		_oldScale = transform.localScale;
 		
 		
 		if(hasChanged) {
@@ -71,18 +71,18 @@ public class Decal : MonoBehaviour {
 		MeshFilter filter = decal.GetComponent<MeshFilter>();
 		if(filter == null) filter = decal.gameObject.AddComponent<MeshFilter>();
 		if(decal.GetComponent<Renderer>() == null) decal.gameObject.AddComponent<MeshRenderer>();
-		decal.material = decal.GetComponent<Renderer>().material;
+		decal.Material = decal.GetComponent<Renderer>().material;
 		
-		if(decal.material == null || decal.sprite == null) {
+		if(decal.Material == null || decal.Sprite == null) {
 			filter.mesh = null;
 			return;
 		}
 		
-		affectedObjects = GetAffectedObjects(decal.GetBounds(), decal.affectedLayers);
-		foreach(GameObject go in affectedObjects) {
+		_affectedObjects = GetAffectedObjects(decal.GetBounds(), decal.AffectedLayers);
+		foreach(GameObject go in _affectedObjects) {
 			DecalBuilder.BuildDecalForObject( decal, go );
 		}
-		DecalBuilder.Push( decal.pushDistance );
+		DecalBuilder.Push( decal.PushDistance );
 		
 		Mesh mesh = DecalBuilder.CreateMesh();
 		if(mesh != null) {
