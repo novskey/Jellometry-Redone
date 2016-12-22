@@ -33,3 +33,10 @@ sysinfo.txt
 ehthumbs.db
 [Tt]humbs.db
 [Dd]esktop.ini
+Assets/Plugins.meta
+Assets/Plugins/Editor.meta
+Assets/Plugins/Editor/Rider.meta
+Assets/Plugins/Editor/Rider/RiderAssetPostprocessor.cs
+Assets/Plugins/Editor/Rider/RiderAssetPostprocessor.cs.meta
+Assets/Plugins/Editor/Rider/RiderPlugin.cs
+Assets/Plugins/Editor/Rider/RiderPlugin.cs.meta
