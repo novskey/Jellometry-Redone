@@ -8,7 +8,6 @@ namespace Gamestrap
     public enum ESceneNames
     {
         MainMenu,
-        Levels,
-        Gameplay
+        Arena,
     }
 }
