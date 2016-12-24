@@ -11,15 +11,15 @@ namespace Gamestrap.UI
     public class MirrorEffect : GamestrapEffect
     {
 
-        public float scale = 1f;
+        public float Scale = 1f;
 
-        public Vector2 offset = Vector2.zero;
+        public Vector2 Offset = Vector2.zero;
         
-        public float skew = 0f;
+        public float Skew = 0f;
 
-        public Color top = Color.white;
+        public Color Top = Color.white;
 
-        public Color bottom = Color.white;
+        public Color Bottom = Color.white;
 
         public override void ModifyVerticesWrapper(List<UIVertex> vertexList)
         {
@@ -49,12 +49,12 @@ namespace Gamestrap.UI
                 vt = verts[i];
                 verts.Add(vt);
 
-                vt.color *= Color.Lerp(top, bottom, ((vt.position.y) - bottomPos) / height);
+                vt.color *= Color.Lerp(Top, Bottom, ((vt.position.y) - bottomPos) / height);
 
                 Vector3 v = vt.position;
-                v.y = bottomPos - (v.y - bottomPos) * scale;
-                v.x = Mathf.Lerp(v.x, v.x + skew, (vt.position.y - bottomPos)/ height);
-                v = v + (Vector3)offset;
+                v.y = bottomPos - (v.y - bottomPos) * Scale;
+                v.x = Mathf.Lerp(v.x, v.x + Skew, (vt.position.y - bottomPos)/ height);
+                v = v + (Vector3)Offset;
                 vt.position = v;
 
 

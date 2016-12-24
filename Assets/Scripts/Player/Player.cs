@@ -14,6 +14,8 @@ namespace Assets.Scripts
 
         public bool StartWithPistol;
 
+        private GameManager _gameManager;
+
         // Use this for initialization
         void Start ()
         {
@@ -26,6 +28,8 @@ namespace Assets.Scripts
 
                 Weapon = pistolObj.GetComponent<IWeapon>();
             }
+
+            _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         }
 
         void AddModifier(Mod modifier)
@@ -116,6 +120,19 @@ namespace Assets.Scripts
             {
                 _health = 0;
             }
+            else
+            {
+                _health -= damage;
+            }
+
+            Debug.Log("player hit");
+
+            _gameManager.UpdateHealth();
+        }
+
+        public float Health()
+        {
+            return _health;
         }
     }
 }

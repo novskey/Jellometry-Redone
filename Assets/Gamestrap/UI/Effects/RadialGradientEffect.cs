@@ -7,13 +7,13 @@ namespace Gamestrap.UI
     [AddComponentMenu("UI/Gamestrap UI/Directional Gradient")]
     public class RadialGradientEffect : GamestrapEffect
     {
-        public Vector2 centerPosition;
-        public float radius;
-        public Color centerColor = Color.white;
+        public Vector2 CenterPosition;
+        public float Radius;
+        public Color CenterColor = Color.white;
 
         public void OnDrawGizmos()
         {
-            Gizmos.DrawSphere(transform.position + (Vector3)centerPosition, 2f);
+            Gizmos.DrawSphere(transform.position + (Vector3)CenterPosition, 2f);
         }
 
         public override void ModifyVerticesWrapper(List<UIVertex> vertexList)
@@ -23,15 +23,15 @@ namespace Gamestrap.UI
                 return;
             }
 
-            if (radius == 0)
+            if (Radius == 0)
             {
-                radius = 1;
+                Radius = 1;
             }
             for (int i = 0; i < vertexList.Count; i++)
             {
                 UIVertex v = vertexList[i];
 
-                v.color *= Color.Lerp(centerColor, Color.white, Mathf.Clamp01(((Vector2)v.position - centerPosition).magnitude / radius));
+                v.color *= Color.Lerp(CenterColor, Color.white, Mathf.Clamp01(((Vector2)v.position - CenterPosition).magnitude / Radius));
                 vertexList[i] = v;
             }
         }

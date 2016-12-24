@@ -2,12 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
+using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
     private int _wave = 0;
     private ShrineManager _shrineManager;
     private AreaSpawner[] _spawners;
+
+    public Text WaveText;
+
+    public int RemainingEnemies;
 
 	// Use this for initialization
 	void Start () {
@@ -42,6 +48,8 @@ public class WaveManager : MonoBehaviour
 
         _wave++;
 
+        WaveText.text = _wave.ToString();
+
         _shrineManager.ClearShrines();
 
         SpawnWave();
@@ -73,10 +81,21 @@ public class WaveManager : MonoBehaviour
             enemyDict["enemyTest"] = toSpawn - spawned;
             StartCoroutine(_spawners.Last().SpawnEnemies(enemyDict));
         }
+
+        RemainingEnemies = toSpawn;
     }
 
     public void WaveSetup()
     {
         _shrineManager.SpawnShrines();
+    }
+
+    public void EnemyKilled()
+    {
+        RemainingEnemies--;
+        if (RemainingEnemies == 0)
+        {
+            WaveSetup();
+        }
     }
 }

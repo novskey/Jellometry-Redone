@@ -1,39 +1,43 @@
 ﻿using UnityEngine;
 using Assets.Scripts;
+using Gamestrap;
 
 public class PlayerControls : MonoBehaviour
 {
     private Player _player;
 
+    private GameplayUI _gameplayUi;
+
     // Use this for initialization
 	void Start ()
 	{
 	     _player = GetComponentInParent<Player>();
+	    _gameplayUi = GameObject.Find("UI Control").GetComponent<GameplayUI>();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        float speedChanged = _player.Speed * Time.deltaTime;
+	void FixedUpdate () {
+        float speedChanged = _player.Speed * Time.fixedDeltaTime;
 
         if (Input.anyKey)
         {
-            if (Input.GetKey(KeyCode.W))
+            if(Input.GetKey(PrefsManager.getKeyCode("Forward")))
             {
                 transform.Translate(Vector3.forward * speedChanged);
             }
-            if (Input.GetKey(KeyCode.A))
+            if (Input.GetKey(PrefsManager.getKeyCode("Left")))
             {
                 transform.Translate(Vector3.left * speedChanged);
             }
-            if (Input.GetKey(KeyCode.S))
+            if (Input.GetKey(PrefsManager.getKeyCode("Back")))
             {
                 transform.Translate(-Vector3.forward * speedChanged);
             }
-            if (Input.GetKey(KeyCode.D))
+            if (Input.GetKey(PrefsManager.getKeyCode("Right")))
             {
                 transform.Translate(Vector3.right * speedChanged);
             }
-            if (Input.GetKey("space") || Input.GetButton("Fire1"))
+            if (Input.GetKey(PrefsManager.getKeyCode("Shoot")))
             {
                 if (_player.Weapon != null)
                 {
@@ -42,7 +46,7 @@ public class PlayerControls : MonoBehaviour
             }
         }
 
-	    if (_player.Weapon != null && _player.transform.GetChild(1).GetComponent<Laser>() != null && !Input.GetButton("Fire1"))
+	    if (_player.Weapon != null && _player.transform.GetChild(1).GetComponent<Laser>() != null && !Input.GetKey(PrefsManager.getKeyCode("Shoot")))
 	    {
 	        _player.Weapon.NotFiring();
 	    }

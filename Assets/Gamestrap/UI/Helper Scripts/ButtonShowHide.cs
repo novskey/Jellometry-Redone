@@ -5,29 +5,29 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class ButtonShowHide : MonoBehaviour {
 
-	public bool startShowGroup;
-	public GameObject[] showHideGroup;
+	public bool StartShowGroup;
+	public GameObject[] ShowHideGroup;
 
-	private bool show;
+	private bool _show;
 
 	void Start () {
 		// This automatically registers the event click on the button component
 		GetComponent<Button>().onClick.AddListener(() => { Click(); });
-		show = startShowGroup;
+		_show = StartShowGroup;
 		ShowHideUpdate();
 	}
 
 	public void Click()
 	{
-		show = !show;
+		_show = !_show;
 		ShowHideUpdate();
 	}
 
 	private void ShowHideUpdate()
 	{
-		foreach (GameObject go in showHideGroup)
+		foreach (GameObject go in ShowHideGroup)
 		{
-			go.SetActive(show);
+			go.SetActive(_show);
 		}
 	}
 }

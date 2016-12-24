@@ -5,7 +5,7 @@ public class DecalManager : MonoBehaviour
 {
     private readonly List<GameObject> _decals = new List<GameObject>();
 
-    private int _maxDecals = 30;
+    private int _maxDecals = 40;
 
     public void AddDecal(GameObject decal)
     {

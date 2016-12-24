@@ -12,10 +12,10 @@ namespace Gamestrap
     public class GSAppExampleControl : MonoBehaviour
     {
         public static GSAppExampleControl Instance;
-        private static int VisibleVariable = Animator.StringToHash("Visible");
+        private static int _visibleVariable = Animator.StringToHash("Visible");
 
-        public Animator faderAnimator;
-        public AnimationClip fadingClip;
+        public Animator FaderAnimator;
+        public AnimationClip FadingClip;
 
         void Awake()
         {
@@ -32,17 +32,18 @@ namespace Gamestrap
 
         public void LoadScene(ESceneNames sceneName)
         {
+            Time.timeScale = 1;
             StartCoroutine(LoadSceneTransitions(sceneName));
         }
 
         private IEnumerator LoadSceneTransitions(ESceneNames sceneName)
         {
-            faderAnimator.SetBool(VisibleVariable, true);
+            FaderAnimator.SetBool(_visibleVariable, true);
             yield return new WaitForEndOfFrame();
 
-            yield return new WaitForSeconds(fadingClip.length);
+            yield return new WaitForSeconds(FadingClip.length);
 #if UNITY_4_6
-        //LoadLevelAsync wasn't in the free version of Unity in 4.6 so did this for compatibility reasons
+//LoadLevelAsync wasn't in the free version of Unity in 4.6 so did this for compatibility reasons
         Application.LoadLevel(sceneName.ToString());
         while (Application.isLoadingLevel)
         {
@@ -53,7 +54,7 @@ namespace Gamestrap
 #else
             yield return SceneManager.LoadSceneAsync(sceneName.ToString());
 #endif
-            faderAnimator.SetBool(VisibleVariable, false);
+            FaderAnimator.SetBool(_visibleVariable, false);
         }
     }
 }

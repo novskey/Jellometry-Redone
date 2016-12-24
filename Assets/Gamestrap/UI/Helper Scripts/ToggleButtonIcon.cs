@@ -7,15 +7,15 @@ using System.Collections;
 [RequireComponent(typeof(Toggle))]
 public class ToggleButtonIcon : MonoBehaviour {
 
-    public Sprite onIcon;
-    public Sprite offIcon;
-    private Toggle toggleButton;
+    public Sprite OnIcon;
+    public Sprite OffIcon;
+    private Toggle _toggleButton;
 
     void Start()
     {
         // This automatically registers the event click on the button component
-        toggleButton = GetComponent<Toggle>();
-        toggleButton.onValueChanged.AddListener(Click);
+        _toggleButton = GetComponent<Toggle>();
+        _toggleButton.onValueChanged.AddListener(Click);
         SetIcon();
     }
 
@@ -26,13 +26,13 @@ public class ToggleButtonIcon : MonoBehaviour {
 
     private void SetIcon()
     {
-        if (toggleButton.isOn)
+        if (_toggleButton.isOn)
         {
-            GetComponent<Image>().sprite = onIcon;
+            GetComponent<Image>().sprite = OnIcon;
         }
         else
         {
-            GetComponent<Image>().sprite = offIcon;
+            GetComponent<Image>().sprite = OffIcon;
         }
     }
 }

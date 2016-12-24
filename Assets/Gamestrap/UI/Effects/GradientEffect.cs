@@ -9,8 +9,8 @@ namespace Gamestrap.UI
     [AddComponentMenu("UI/Gamestrap UI/Gradient")]
     public class GradientEffect : GamestrapEffect
     {
-        public Color top = Color.white;
-        public Color bottom = Color.white;
+        public Color Top = Color.white;
+        public Color Bottom = Color.white;
 
 
         public override void ModifyVerticesWrapper(List<UIVertex> vertexList)
@@ -29,12 +29,12 @@ namespace Gamestrap.UI
 #else //This if has to be changed if you are using version 5.2.1p3 or later patches of 5.2.1 Use the bottom code for it to work.
             if (vertexList.Count == 6)
             {
-                SetVertexColor(vertexList, 0, bottom);
-                SetVertexColor(vertexList, 1, top);
-                SetVertexColor(vertexList, 2, top);
-                SetVertexColor(vertexList, 3, top);
-                SetVertexColor(vertexList, 4, bottom);
-                SetVertexColor(vertexList, 5, bottom);
+                SetVertexColor(vertexList, 0, Bottom);
+                SetVertexColor(vertexList, 1, Top);
+                SetVertexColor(vertexList, 2, Top);
+                SetVertexColor(vertexList, 3, Top);
+                SetVertexColor(vertexList, 4, Bottom);
+                SetVertexColor(vertexList, 5, Bottom);
 #endif
             }
             else
@@ -47,7 +47,7 @@ namespace Gamestrap.UI
                 for (int i = 0; i < vertexList.Count; i++)
                 {
                     UIVertex v = vertexList[i];
-                    v.color *= Color.Lerp(top, bottom, ((v.position.y) - bottomPos) / height);
+                    v.color *= Color.Lerp(Top, Bottom, ((v.position.y) - bottomPos) / height);
                     vertexList[i] = v;
                 }
             }

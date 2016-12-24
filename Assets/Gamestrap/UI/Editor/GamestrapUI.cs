@@ -1082,8 +1082,8 @@ namespace Gamestrap.UI
                     {
                         gradientEffect = Undo.AddComponent<GradientEffect>(gameObject);
                     }
-                    gradientEffect.top = set.gradientTop;
-                    gradientEffect.bottom = set.gradientBottom;
+                    gradientEffect.Top = set.gradientTop;
+                    gradientEffect.Bottom = set.gradientBottom;
                     EditorUtility.SetDirty(gradientEffect);
                 }
                 else if (gameObject.GetComponent<GradientEffect>())
@@ -1098,9 +1098,9 @@ namespace Gamestrap.UI
                     {
                         gradientEffect = Undo.AddComponent<RadialGradientEffect>(gameObject);
                     }
-                    gradientEffect.centerColor = set.radialColor;
-                    gradientEffect.centerPosition = set.centerPosition;
-                    gradientEffect.radius = set.radius;
+                    gradientEffect.CenterColor = set.radialColor;
+                    gradientEffect.CenterPosition = set.centerPosition;
+                    gradientEffect.Radius = set.radius;
                     EditorUtility.SetDirty(gradientEffect);
                 }
                 else if (gameObject.GetComponent<RadialGradientEffect>())
@@ -1134,11 +1134,11 @@ namespace Gamestrap.UI
                     {
                         mirrorEffect = Undo.AddComponent<MirrorEffect>(gameObject);
                     }
-                    mirrorEffect.top = set.mirrorTop;
-                    mirrorEffect.bottom = set.mirrorBottom;
-                    mirrorEffect.offset = set.mirrorOffset;
-                    mirrorEffect.scale = set.mirrorScale;
-                    mirrorEffect.skew = set.mirrorSkew;
+                    mirrorEffect.Top = set.mirrorTop;
+                    mirrorEffect.Bottom = set.mirrorBottom;
+                    mirrorEffect.Offset = set.mirrorOffset;
+                    mirrorEffect.Scale = set.mirrorScale;
+                    mirrorEffect.Skew = set.mirrorSkew;
                     EditorUtility.SetDirty(mirrorEffect);
                 }
                 else if (gameObject.GetComponent<MirrorEffect>())
@@ -1153,8 +1153,8 @@ namespace Gamestrap.UI
                     {
                         skewEffect = Undo.AddComponent<SkewEffect>(gameObject);
                     }
-                    skewEffect.skew = set.skew;
-                    skewEffect.perspective = set.perspective;
+                    skewEffect.Skew = set.skew;
+                    skewEffect.Perspective = set.perspective;
                     EditorUtility.SetDirty(skewEffect);
                 }
                 else if (gameObject.GetComponent<SkewEffect>())

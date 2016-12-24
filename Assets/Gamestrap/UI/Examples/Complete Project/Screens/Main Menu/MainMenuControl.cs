@@ -6,23 +6,23 @@ namespace Gamestrap
 {
     public class MainMenuControl : MonoBehaviour
     {
-        private static int visibleVariable = Animator.StringToHash("Visible");
-        private static int notifyVariable = Animator.StringToHash("Notify");
+        private static int _visibleVariable = Animator.StringToHash("Visible");
+        private static int _notifyVariable = Animator.StringToHash("Notify");
 
-        public GameObject settingsPanel, aboutPanel;
+        public GameObject SettingsPanel, AboutPanel;
 
-        public Toggle soundToggle, musicToggle;
+        public Toggle SoundToggle, MusicToggle;
 
-        public Text notificationText;
-        private Animator notificationAnimator;
+        public Text NotificationText;
+        private Animator _notificationAnimator;
         public void Start()
         {
             //Adds events to the Toggle buttons through code since
             //doing it through the inspector wouldn't will give the value of the button dynamically
-            soundToggle.onValueChanged.AddListener(ToggleSound);
-            musicToggle.onValueChanged.AddListener(ToggleMusic);
+            SoundToggle.onValueChanged.AddListener(ToggleSound);
+            MusicToggle.onValueChanged.AddListener(ToggleMusic);
 
-            notificationAnimator = notificationText.GetComponent<Animator>();
+            _notificationAnimator = NotificationText.GetComponent<Animator>();
         }
 
         #region Event Methods Called from the UI
@@ -33,26 +33,26 @@ namespace Gamestrap
 
         public void AchievementsClick()
         {
-            notificationText.text = "Achievements Clicked...";
-            notificationAnimator.SetTrigger(notifyVariable);
+            NotificationText.text = "Achievements Clicked...";
+            _notificationAnimator.SetTrigger(_notifyVariable);
         }
 
         public void LeaderboardClick()
         {
-            notificationText.text = "Leaderboard Clicked...";
-            notificationAnimator.SetTrigger(notifyVariable);
+            NotificationText.text = "Leaderboard Clicked...";
+            _notificationAnimator.SetTrigger(_notifyVariable);
         }
 
         public void RateClick()
         {
-            notificationText.text = "Rate Clicked...";
-            notificationAnimator.SetTrigger(notifyVariable);
+            NotificationText.text = "Rate Clicked...";
+            _notificationAnimator.SetTrigger(_notifyVariable);
         }
 
         #region Settings Events
         public void ToggleSettingsPanel()
         {
-            TogglePanel(settingsPanel.GetComponent<Animator>());
+            TogglePanel(SettingsPanel.GetComponent<Animator>());
         }
 
         public void ToggleSound(bool on)
@@ -93,12 +93,12 @@ namespace Gamestrap
 
         public void ToggleAboutPanel()
         {
-            TogglePanel(aboutPanel.GetComponent<Animator>());
+            TogglePanel(AboutPanel.GetComponent<Animator>());
         }
 
         private void TogglePanel(Animator panelAnimator)
         {
-            panelAnimator.SetBool(visibleVariable, !panelAnimator.GetBool(visibleVariable));
+            panelAnimator.SetBool(_visibleVariable, !panelAnimator.GetBool(_visibleVariable));
         }
         #endregion
     }

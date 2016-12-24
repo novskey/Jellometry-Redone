@@ -1,36 +1,54 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Runtime.Serialization.Formatters;
 
 namespace Gamestrap
 {
     public class GameplayUI : MonoBehaviour
     {
 
-        public GameObject pausePanel;
+        public GameObject PausePanel;
 
-        private bool pause;
+        private static bool _pause;
 
+        private bool _canUnPause = true;
 
         /// <summary>
         /// It activates the pause animation in the pause panel
         /// </summary>
         public bool Pause
         {
-            get { return pause; }
+            get { return _pause; }
             set
             {
-                pause = value;
+                _pause = value;
 
-                if (pause)
+                if (_pause)
                 {
-                    pausePanel.GetComponent<Animator>().SetBool("Visible", true);
+                    Time.timeScale = 0;
+                    PausePanel.SetActive(true);
+                    PausePanel.GetComponent<Animator>().SetBool("Visible", true);
                 }
                 else
                 {
-                    pausePanel.GetComponent<Animator>().SetBool("Visible", false);
+                    Time.timeScale = 1;
+                    PausePanel.SetActive(false);
+//                    PausePanel.GetComponent<Animator>().SetBool("Visible", false);
                 }
             }
         }
 
+        void Update()
+        {
+            if (Input.anyKey)
+            {
+                if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(PrefsManager.getKeyCode("Pause")))
+                {
+                    Debug.Log("game paused?: " + Pause);
+
+                    Pause = !Pause;
+                }
+            }
+        }
     }
 }

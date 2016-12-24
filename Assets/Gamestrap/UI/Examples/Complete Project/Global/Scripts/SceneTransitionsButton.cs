@@ -11,7 +11,7 @@ namespace Gamestrap
     public class SceneTransitionsButton : MonoBehaviour
     {
 
-        public ESceneNames sceneName;
+        public ESceneNames SceneName;
 
         void Start()
         {
@@ -21,7 +21,7 @@ namespace Gamestrap
 
         void ButtonClick()
         {
-            GSAppExampleControl.Instance.LoadScene(sceneName);
+            GSAppExampleControl.Instance.LoadScene(SceneName);
         }
     }
 }

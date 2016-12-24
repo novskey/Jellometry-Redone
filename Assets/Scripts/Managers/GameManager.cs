@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts;
+using UnityEditor;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,17 +9,25 @@ public class GameManager : MonoBehaviour
 
     public Text ScoreText;
     public Text TimeText;
+    public Text HealthText;
+
     private int _score;
     private float _startTime;
     private bool _gamestarted;
 
+    private bool _paused;
     private WaveManager _waveManager;
+    private Player _player;
 
     // Use this for initialization
     void Start () {
         _waveManager = GameObject.Find("WaveManager").GetComponent<WaveManager>();
         _waveManager.WaveSetup();
-	}
+
+        _player = GameObject.Find("player").GetComponent<Player>();
+
+        Debug.Log(PlayerPrefs.GetString("Name"));
+    }
 
     private void UpdateTime()
     {
@@ -41,6 +50,11 @@ public class GameManager : MonoBehaviour
         {
             UpdateTime();
         }
+    }
+
+    public void UpdateHealth()
+    {
+        HealthText.text = _player.Health().ToString();
     }
 
     void UpdateScore ()
@@ -82,10 +96,26 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        _waveManager.EnemyKilled();
+
         Debug.Log("Player killed a: " + enemyInfo.Type + " worth " + points);
 
         _score += points;
         UpdateScore();
+    }
+
+    public void TogglePause()
+    {
+        if (_paused)
+        {
+            _paused = false;
+            Time.timeScale = 1;
+        }
+        else
+        {
+            _paused = true;
+            Time.timeScale = 0;
+        }
     }
 
 }
