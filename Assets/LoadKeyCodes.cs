@@ -1,9 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security;
 using UnityEngine.UI;
 
 public class LoadKeyCodes : MonoBehaviour {

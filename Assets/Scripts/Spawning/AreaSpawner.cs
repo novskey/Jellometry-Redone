@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
@@ -9,6 +8,7 @@ public class AreaSpawner : MonoBehaviour
     private Bounds[] _spawnAreas;
 
     private PrefabManager _prefabManager;
+
 
     int _spawnCount = 0;
 
@@ -41,7 +41,8 @@ public class AreaSpawner : MonoBehaviour
                 Instantiate(_prefabManager.Get(kvPair.Key),RandomPoint(),transform.rotation);
             }
         }
-        yield break;
+
+        yield return null;
     }
 
     // Update is called once per frame
@@ -56,5 +57,11 @@ public class AreaSpawner : MonoBehaviour
         float z = Random.Range(bounds.min.z, bounds.max.z);
 
         return new Vector3(x,1f,z);
+    }
+
+
+    public void SpawnBoss(GameObject boss)
+    {
+        GameObject b = (GameObject) Instantiate(boss, RandomPoint(), transform.rotation);
     }
 }

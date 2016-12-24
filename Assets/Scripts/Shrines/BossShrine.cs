@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts;
 
 public class BossShrine : MonoBehaviour, IShrine
@@ -8,8 +7,11 @@ public class BossShrine : MonoBehaviour, IShrine
     public GameObject DefaultModel;
     public GameObject ActivatedModel;
     public GameObject Boss;
+    public ShrineManager.BossColour Colour;
 
-    public BossReward Reward;
+    private BossReward _bossReward;
+
+//    public BossReward Reward;
 
 	// Use this for initialization
 	void Start ()
@@ -18,6 +20,8 @@ public class BossShrine : MonoBehaviour, IShrine
 
 	    DefaultModel.SetActive(true);
 	    ActivatedModel.SetActive(false);
+
+	    Boss.GetComponent<BossHealth>().Colour = Colour;
 	}
 	
 	// Update is called once per frame
@@ -54,5 +58,10 @@ public class BossShrine : MonoBehaviour, IShrine
     public GameObject ActiveModel()
     {
         return Activated ? DefaultModel : ActivatedModel;
+    }
+
+    public void SaveReward(BossReward reward)
+    {
+        _bossReward = reward;
     }
 }

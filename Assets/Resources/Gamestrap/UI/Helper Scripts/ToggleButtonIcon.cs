@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System;
-using System.Collections;
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Toggle))]

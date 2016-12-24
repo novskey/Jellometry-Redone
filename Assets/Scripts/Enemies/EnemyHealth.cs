@@ -10,12 +10,17 @@ public class EnemyHealth : MonoBehaviour {
         Debug.Log(this + " got hit for " + damage);
         if (Health - damage <= 0)
         {
-            GameObject.Find("GameManager").SendMessage("EnemyKilled", gameObject.GetComponent<IEnemy>());
-            Destroy(gameObject);
+            Die();
         }
         else
         {
             Health -= damage;
         }
+    }
+
+    public virtual void Die()
+    {
+        GameObject.Find("GameManager").SendMessage("EnemyKilled", gameObject.GetComponent<IEnemy>());
+        Destroy(gameObject);
     }
 }

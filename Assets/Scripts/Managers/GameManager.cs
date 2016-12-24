@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Assets.Scripts;
-using UnityEditor;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -82,7 +80,7 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Player killed a: " + type + " worth " + points);
 
-        _score += points;
+        _score += (int) (points * _player.ScoreMultiplier());
         UpdateScore();
     }
 
@@ -98,6 +96,7 @@ public class GameManager : MonoBehaviour
 
         _waveManager.EnemyKilled();
 
+        points = (int) (points* _player.ScoreMultiplier());
         Debug.Log("Player killed a: " + enemyInfo.Type + " worth " + points);
 
         _score += points;

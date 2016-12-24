@@ -1,21 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using Assets.Scripts;
 
 public class ShrineManager : MonoBehaviour
 {
-    public Dictionary<string, int> ShrineLevels = new Dictionary<string, int>
+    public enum BossColour
     {
-        {"yellow", 1},
-        {"green", 1},
-        {"blue", 1},
-        {"purple", 1},
-        {"white", 1},
-        {"orange", 1},
-        {"red", 1},
-        {"aqua", 1}
+        Yellow,
+        Green,
+        Blue,
+        Purple,
+        White,
+        Orange,
+        Red,
+        Aqua
+    }
+
+    public Dictionary<BossColour, int> ShrineLevels = new Dictionary<BossColour, int>
+    {
+        {BossColour.Yellow, 0},
+        {BossColour.Green, 0},
+        {BossColour.Blue, 0},
+        {BossColour.Purple, 0},
+        {BossColour.White,0},
+        {BossColour.Orange, 0},
+        {BossColour.Red, 0},
+        {BossColour.Aqua, 0}
     };
 
     private GameObject[] _shrineObjects;
@@ -68,9 +79,14 @@ public class ShrineManager : MonoBehaviour
         Destroy(shrine);
     }
 
+    public int ShrineLevel(BossColour colour)
+    {
+        return ShrineLevels[colour];
+    }
+
     public void SpawnShrines()
     {
-        List<GameObject> spawnedShrines = new List<GameObject>();
+        List<BossColour> spawnedShrines = new List<BossColour>();
 
         for (int i = 0; i < 4; i++)
         {
@@ -78,9 +94,10 @@ public class ShrineManager : MonoBehaviour
             do
             {
                 randShrine = RandomShrine();
-            } while (spawnedShrines.Contains(randShrine));
+            } while (spawnedShrines.Contains(randShrine.GetComponent<BossShrine>().Colour));
 
             Instantiate(randShrine, ShrineSpots[i], transform.rotation);
+            spawnedShrines.Add(randShrine.GetComponent<BossShrine>().Colour);
         }
 
         Instantiate(_prefabManager.Get("start shrine"), transform.position, transform.rotation);

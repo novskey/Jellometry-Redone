@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 public class Laser : MonoBehaviour, IWeapon
@@ -18,8 +17,9 @@ public class Laser : MonoBehaviour, IWeapon
         _laser = GetComponent<LineRenderer>();
         _laser.SetVertexCount(2);
 
-        Damage = 5;
-        FireDelay = 0.3f;
+        Damage = BaseDamage = 5;
+
+        FireDelay = BaseDelay = 0.3f;
     }
 
     public void Fire()
@@ -107,4 +107,7 @@ public class Laser : MonoBehaviour, IWeapon
     {
         _firing = false;
     }
+
+    public float BaseDamage { get; set; }
+    public float BaseDelay { get; set; }
 }

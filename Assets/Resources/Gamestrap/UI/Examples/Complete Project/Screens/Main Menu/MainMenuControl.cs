@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 namespace Gamestrap
 {
@@ -101,5 +100,10 @@ namespace Gamestrap
             panelAnimator.SetBool(_visibleVariable, !panelAnimator.GetBool(_visibleVariable));
         }
         #endregion
+
+        public void Quit()
+        {
+            Application.Quit();
+        }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
 using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
@@ -15,7 +12,9 @@ public class WaveManager : MonoBehaviour
 
     public int RemainingEnemies;
 
-	// Use this for initialization
+    private List<GameObject> _nextWaveBosses = new List<GameObject>();
+
+    // Use this for initialization
 	void Start () {
 	    _shrineManager = GameObject.Find("ShrineManager").GetComponent<ShrineManager>();
 
@@ -35,6 +34,7 @@ public class WaveManager : MonoBehaviour
 
     public void SummonBoss(GameObject boss)
     {
+        _nextWaveBosses.Add(boss);
         Debug.Log("added " + boss + " to next wave");
     }
 
@@ -79,10 +79,31 @@ public class WaveManager : MonoBehaviour
         if (toSpawn - spawned > 0)
         {
             enemyDict["enemyTest"] = toSpawn - spawned;
-            StartCoroutine(_spawners.Last().SpawnEnemies(enemyDict));
+            StartCoroutine(RandomSpawner().SpawnEnemies(enemyDict));
         }
 
-        RemainingEnemies = toSpawn;
+
+        RemainingEnemies = toSpawn + _nextWaveBosses.Count;
+        if (_nextWaveBosses.Count != 0)
+        {
+            SpawnBosses();
+        }
+
+    }
+
+    public void SpawnBosses()
+    {
+        foreach (GameObject boss in _nextWaveBosses)
+        {
+            RandomSpawner().SpawnBoss(boss);
+        }
+
+        _nextWaveBosses.Clear();
+    }
+
+    public AreaSpawner RandomSpawner()
+    {
+        return _spawners[Random.Range(0, _spawners.Length)];
     }
 
     public void WaveSetup()

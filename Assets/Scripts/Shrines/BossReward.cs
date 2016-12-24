@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using Assets.Scripts.Pickups.Structure;
+﻿using Assets.Scripts.Pickups.Structure;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
-    public class BossReward
+    public class BossReward : MonoBehaviour
     {
-        public float Modifier;
+        public float[] Modifiers = new float[5];
 
         public PlayerStat Target;
 
@@ -18,20 +17,33 @@ namespace Assets.Scripts
 
         private Mod _mod;
 
-        public BossReward(float modifier, PlayerStat target, bool direct)
+        private ShrineManager _shrineManager;
+
+        void Start()
         {
-            Modifier = modifier;
-            Target = target;
-            Direct = direct;
+            _playerObj = GameObject.FindWithTag("Player");
+            _player = _playerObj.GetComponent<Player>();
+
+            _shrineManager = GameObject.Find("ShrineManager").GetComponent<ShrineManager>();
         }
+
 
         public void Activate()
         {
-            _playerObj = GameObject.Find("Player");
-            _player = _playerObj.GetComponent<Player>();
-            _mod = new Mod(Target, Modifier, Direct ? "direct" : "multiplier");
+            Debug.Log("boss colour: " + GetComponent<BossHealth>().Colour);
+            int level = _shrineManager.ShrineLevel(GetComponent<BossHealth>().Colour);
+
+            if (level > 0)
+            {
+                _player.SendMessage("RemoveModifier",_mod);
+            }
+
+            Debug.Log(transform + " activating at level: " + level);
+            _mod = new Mod(Target, Modifiers[level], Direct ? "direct" : "multiplier");
             _player.SendMessage("AddModifier",_mod);
 
+
+            GameObject.Find("ShrineManager").GetComponent<ShrineManager>().ShrineLevels[GetComponent<BossHealth>().Colour]++;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using Assets.Scripts;
 
 public class Grunt : MonoBehaviour, IEnemy
@@ -16,7 +14,7 @@ public class Grunt : MonoBehaviour, IEnemy
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 	    transform.LookAt(_player.transform);
 
 

@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
 
@@ -18,8 +17,8 @@ public class Sniper : MonoBehaviour, IWeapon {
         _laser = GetComponent<LineRenderer>();
         _laser.SetVertexCount(2);
 
-        Damage = 50;
-        FireDelay = 2f;
+        Damage = BaseDamage  = 50;
+        FireDelay = BaseDelay = 2f;
     }
 
     public void Fire()
@@ -92,4 +91,7 @@ public class Sniper : MonoBehaviour, IWeapon {
         yield return new WaitForSeconds(delay);
         Ready = true;
     }
+
+    public float BaseDamage { get; set; }
+    public float BaseDelay { get; set; }
 }

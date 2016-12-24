@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Runtime.Serialization.Formatters;
 using Assets.Scripts;
 
 public class StartShrine : MonoBehaviour, IShrine

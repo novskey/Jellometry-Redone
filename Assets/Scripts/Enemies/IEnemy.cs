@@ -9,6 +9,7 @@
     public enum EnemyType
     {
         Tank,
-        Grunt
+        Grunt,
+        Boss
     }
 }

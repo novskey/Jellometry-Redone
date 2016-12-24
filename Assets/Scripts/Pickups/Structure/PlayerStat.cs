@@ -5,6 +5,7 @@
         Hp,
         Speed,
         Damage,
-        Attackspeed
+        Attackspeed,
+        ScoreEarned
     }
 }

@@ -17,9 +17,9 @@ public class Pistol : MonoBehaviour,IWeapon
 
         Ready = true;
 
-        Damage = 10;
+        Damage = BaseDamage  = 10;
 
-        FireDelay = 0.5f;
+        FireDelay = BaseDelay = 0.5f;
     }
 
     public void Fire()
@@ -51,6 +51,6 @@ public class Pistol : MonoBehaviour,IWeapon
         Ready = true;
     }
 
-
-
+    public float BaseDamage { get; set; }
+    public float BaseDelay { get; set; }
 }
