@@ -7,18 +7,6 @@ namespace Assets.Scripts.Managers
 {
     public class ShrineManager : MonoBehaviour
     {
-        public enum BossColour
-        {
-            Yellow,
-            Green,
-            Blue,
-            Purple,
-            White,
-            Orange,
-            Red,
-            Aqua,
-            DarkGreen
-        }
 
         public Dictionary<BossColour, int> ShrineLevels = new Dictionary<BossColour, int>
         {
@@ -45,17 +33,17 @@ namespace Assets.Scripts.Managers
             _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
             _shrineObjects = _prefabManager.GetShrines();
         }
-	
-        // Update is called once per frame
-        void Update () {
-	
-        }
 
         public static GameObject RandomShrine()
         {
             int index = Random.Range(0, _shrineObjects.Length);
 
             return _shrineObjects[index];
+        }
+
+        public void PlaceStartShrine()
+        {
+            Instantiate(_prefabManager.Get("start shrine"), Vector3.zero, Quaternion.identity);
         }
 
         public void ClearShrines()
@@ -105,7 +93,13 @@ namespace Assets.Scripts.Managers
                 spawnedShrines.Add(randShrine.GetComponent<BossShrine>().Colour);
             }
 
-            Instantiate(_prefabManager.Get("start shrine"), Vector3.zero, Quaternion.identity);
+            PlaceStartShrine();
+        }
+
+        public void ClearStartShrine()
+        {
+            foreach (GameObject o in GameObject.FindGameObjectsWithTag("Start Shrine"))
+                Destroy(o);
         }
     }
 }

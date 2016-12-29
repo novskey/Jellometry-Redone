@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Assets.Scripts.Enemies;
+using Assets.Scripts.Enemies.Bosses;
+using Assets.Scripts.Pickups.Structure;
 using Assets.Scripts.Spawning;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,16 +11,24 @@ namespace Assets.Scripts.Managers
 {
     public class WaveManager : MonoBehaviour
     {
-        private int _wave = 0;
+        public static int Wave = 0;
         private AreaSpawner[] _spawners;
 
         public Text WaveText;
 
-        public static int RemainingEnemies;
+        public static int RemainingEnemies = 0;
 
-        private List<GameObject> _nextWaveBosses = new List<GameObject>();
+        private List<GameObject> _segmentBosses = new List<GameObject>();
 
         private ShrineManager _shrineManager;
+
+        private PrefabManager _prefabManager;
+
+        private List<BossColour> _segmentColours = new List<BossColour>();
+
+        private Player.Player _player;
+
+        private Mod _earlyStartMod = new Mod(PlayerStat.ScoreEarned, 0.5f, "multiplier");
 
         // Use this for initialization
         void Start () {
@@ -24,6 +36,8 @@ namespace Assets.Scripts.Managers
             GameObject[] spawnZones = GameObject.FindGameObjectsWithTag("SpawnZone");
 
             _shrineManager = GameObject.Find("ShrineManager").GetComponent<ShrineManager>();
+            _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+            _player = GameObject.Find("player").GetComponent<Player.Player>();
 
             _spawners = new AreaSpawner[spawnZones.Length];
 
@@ -32,79 +46,84 @@ namespace Assets.Scripts.Managers
                 _spawners[i] = spawnZones[i].GetComponent<AreaSpawner>();
             }
         }
-	
-        // Update is called once per frame
-        void Update () {
-	
-        }
 
         public void SummonBoss(GameObject boss)
         {
-            _nextWaveBosses.Add(boss);
-            Debug.Log("added " + boss + " to next wave");
+            _segmentBosses.Add(boss);
+            Debug.Log("added " + boss + " to next segment");
+        }
+
+        public void StartSegment()
+        {
+            Debug.Log("start segment");
+
+            if (Wave == 0)
+            {
+                GameObject.Find("GameManager").SendMessage("StartGame");
+            }
+
+
+            _segmentBosses.Add(_prefabManager.Get("Normal Boss"));
+
+            foreach (GameObject nextSegmentBoss in _segmentBosses)
+            {
+                Debug.Log(nextSegmentBoss);
+                BossColour colour = nextSegmentBoss.GetComponent<BossHealth>().Colour;
+
+                _segmentColours.Add(colour);
+            }
+
+
+
+            StartWave();
+
+            _shrineManager.ClearShrines();
         }
 
         public void StartWave()
         {
             Debug.Log("start wave");
-            if (_wave == 0)
-            {
-                GameObject.Find("GameManager").SendMessage("StartGame");
-            }
 
-            _wave++;
+            Wave++;
 
-            WaveText.text = _wave.ToString();
+            WaveText.text = Wave.ToString();
 
-            _shrineManager.ClearShrines();
+
+            WaveSetup();
 
             SpawnWave();
+
         }
 
         private void SpawnWave()
         {
-            Debug.Log("spawning wave: " + _wave);
-            int spawned = 0;
+            Debug.Log("spawning wave: " + Wave);
 
-            int toSpawn = _wave * 5;
-
-            int perWave = toSpawn / _spawners.Length;
-
-            Dictionary<string,int> enemyDict = new Dictionary<string, int>
-            {
-                {"enemyTest", perWave}
-            };
 
             foreach (AreaSpawner areaSpawner in _spawners)
             {
-                StartCoroutine(areaSpawner.SpawnEnemies(enemyDict));
-                spawned += perWave;
-                Debug.Log("spawned: " + spawned);
+                StartCoroutine(areaSpawner.SpawnEnemies(_segmentColours));
             }
 
-            if (toSpawn - spawned > 0)
-            {
-                enemyDict["enemyTest"] = toSpawn - spawned;
-                StartCoroutine(RandomSpawner().SpawnEnemies(enemyDict));
-            }
+            RemainingEnemies += Wave * _spawners.Length * _segmentColours.Count;
 
-
-            RemainingEnemies = toSpawn + _nextWaveBosses.Count;
-            if (_nextWaveBosses.Count != 0)
+            if (_segmentBosses.Count != 0 && Wave % 5 == 0)
             {
                 SpawnBosses();
+                RemainingEnemies += _segmentBosses.Count;
             }
+            Debug.Log(RemainingEnemies);
 
         }
 
         public void SpawnBosses()
         {
-            foreach (GameObject boss in _nextWaveBosses)
+            foreach (GameObject boss in _segmentBosses)
             {
                 RandomSpawner().SpawnBoss(boss);
             }
 
-            _nextWaveBosses.Clear();
+            _segmentBosses.Clear();
         }
 
         public AreaSpawner RandomSpawner()
@@ -114,16 +133,45 @@ namespace Assets.Scripts.Managers
 
         public void WaveSetup()
         {
-            _shrineManager.SpawnShrines();
+            if (Wave % 5 == 0)
+            {
+                _shrineManager.SpawnShrines();
+            }
+            else
+            {
+                _shrineManager.ClearStartShrine();
+                _shrineManager.PlaceStartShrine();
+            }
         }
 
         public void EnemyKilled()
         {
             RemainingEnemies--;
+            Debug.Log(RemainingEnemies);
             if (RemainingEnemies == 0)
             {
-                WaveSetup();
+                StartWave();
             }
+        }
+
+        public void StartShrine()
+        {
+            if (Wave % 5 == 0)
+            {
+                StartSegment();
+            }
+            else
+            {
+                StartCoroutine(EarlyStartBuff());
+                StartWave();
+            }
+        }
+
+        private IEnumerator EarlyStartBuff()
+        {
+            _player.UpdateModifier(_earlyStartMod, true);
+            yield return new WaitForSeconds(15);
+            _player.UpdateModifier(_earlyStartMod, false);
         }
     }
 }

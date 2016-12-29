@@ -20,18 +20,20 @@ namespace Assets.Scripts.Pickups.Structure
 
         private Mod _mod;
 
-        public void Activate()
+        public IEnumerator Activate()
         {
             _playerObj = GameObject.Find("Player");
             _player = _playerObj.GetComponent<Player.Player>();
             _mod = new Mod(Target, Modifier, Direct ? "direct" : "multiplier");
-            _player.UpdateModifier(_mod, true);
-        }
 
-        public IEnumerator Remove() {
-            Debug.Log("Start remove");
-            yield return new WaitForSeconds(Duration);
-            Debug.Log("Removing");
+
+            _player.UpdateModifier(_mod, true);
+
+            if (_mod.Type == "multiplier")
+            {
+                yield return new WaitForSeconds(Duration);
+                _player.UpdateModifier(_mod, false);
+            }
             _player.UpdateModifier(_mod, false);
         }
 
@@ -46,8 +48,6 @@ namespace Assets.Scripts.Pickups.Structure
                     gameObject.GetComponent<MeshRenderer>().enabled = false;
 
                     CheckDecals();
-
-                    Destroy(gameObject);
                 }
                 else
                 {
@@ -56,10 +56,6 @@ namespace Assets.Scripts.Pickups.Structure
                     CheckDecals();
 
                     Activate();
-
-                    StartCoroutine(Remove());
-
-                    Destroy(gameObject,Duration + 0.5f);
                 }
             }
         }

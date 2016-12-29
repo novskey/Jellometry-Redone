@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Enemies;
 using Assets.Scripts.Enemies.Bosses;
 using Assets.Scripts.Pickups.Structure;
@@ -9,7 +10,7 @@ namespace Assets
     public class SOI : MonoBehaviour
     {
 
-        private AOEBuff _aoeBuff;
+        private AoeBuff _buff;
 
         private Mod _mod;
 
@@ -17,9 +18,9 @@ namespace Assets
 
         void Start()
         {
-            _aoeBuff = transform.parent.GetComponent<AOEBuff>();
+            _buff = transform.parent.GetComponent<AoeBuff>();
 
-            _mod = new Mod(_aoeBuff.Target, _aoeBuff.Modifier, _aoeBuff.Direct ? "direct" : "multiplier");
+            _mod = new Mod(_buff.Target, _buff.Modifier, _buff.Direct ? "direct" : "multiplier");
         }
 
         void OnCollisionEnter(Collision other)
@@ -35,14 +36,31 @@ namespace Assets
                     Debug.Log("Triggered by player");
                     break;
                 default:
-                    if (other.tag == _aoeBuff.Tag)
+                    if (other.tag == _buff.Tag)
                     {
                         Debug.Log("Triggered by " + other.gameObject + ", applying buff");
-                        other.GetComponent<IEnemyHealth>().UpdateModifier(_mod, true);
+                        StartCoroutine(ScaleBuff(other, 3, true));
                         _buffedEnemies.Add(other);
                     }
                     break;
             }
+        }
+
+        private IEnumerator ScaleBuff(Collider other, int steps, bool up)
+        {
+            Debug.Log("Scaling up buff on " + other.gameObject);
+            Debug.Log(steps + " steps");
+            float stepAmount = _mod.Modifier / steps;
+
+            Mod _incMod = new Mod(_buff.Target,stepAmount, _buff.Direct ? "direct" : "multiplier");
+
+            for (int i = 0; i < steps; i++)
+            {
+                Debug.Log("Applied buff number " + i);
+                other.GetComponent<IEnemyHealth>().UpdateModifier(_incMod, up);
+                yield return new WaitForSeconds(1);
+            }
+            Debug.Log("done scaling buff!");
         }
 
         void OnTriggerExit(Collider other)
@@ -55,7 +73,7 @@ namespace Assets
                 case "Enemy":
                     Debug.Log("Trigger by enemy, removing buff");
                     _buffedEnemies.Remove(other);
-                    other.GetComponent<IEnemyHealth>().UpdateModifier(_mod, false);
+                    StartCoroutine(ScaleBuff(other, 3, false));
                     break;
             }
         }

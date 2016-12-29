@@ -10,7 +10,7 @@ namespace Assets.Scripts.Shrines
         public GameObject DefaultModel;
         public GameObject ActivatedModel;
         public GameObject Boss;
-        public ShrineManager.BossColour Colour;
+        public BossColour Colour;
 
 //    public BossReward Reward;
 

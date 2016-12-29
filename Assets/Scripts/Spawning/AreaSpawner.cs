@@ -12,7 +12,6 @@ namespace Assets.Scripts.Spawning
 
         int _spawnCount = 0;
 
-
         private PrefabManager _prefabManager;
 
         // Use this for initialization
@@ -32,13 +31,13 @@ namespace Assets.Scripts.Spawning
             }
         }
 
-        public IEnumerator SpawnEnemies(Dictionary<string, int> enemies)
+        public IEnumerator SpawnEnemies(List<BossColour> enemies)
         {
-            foreach (KeyValuePair<string,int> kvPair in enemies)
+            foreach (BossColour colour in enemies)
             {
-                for (int i = 0; i < kvPair.Value; i++)
+                for (int i = 0; i < WaveManager.Wave; i++)
                 {
-                    Instantiate(_prefabManager.Get(kvPair.Key),RandomPoint(),transform.rotation);
+                    Instantiate(_prefabManager.Get("follower_" + colour),RandomPoint(),transform.rotation);
                 }
             }
 

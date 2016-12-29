@@ -43,7 +43,7 @@ namespace Assets.Scripts.Shrines
             DefaultModel.SetActive(false);
             ActivatedModel.SetActive(true);
 
-            GameObject.Find("WaveManager").GetComponent<WaveManager>().StartWave();
+            GameObject.Find("WaveManager").GetComponent<WaveManager>().StartShrine();
         }
 
         public float Health { get; set; }

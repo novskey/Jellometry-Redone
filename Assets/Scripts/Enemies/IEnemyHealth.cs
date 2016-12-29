@@ -10,6 +10,6 @@ namespace Assets.Scripts.Enemies
         float CurrentHealth { get; set; }
         Dictionary<PlayerStat, float> StatModifiers { get; set; }
 
-        void UpdateModifier(Mod mod, bool b);
+        void UpdateModifier(Mod mod, bool add);
     }
 }

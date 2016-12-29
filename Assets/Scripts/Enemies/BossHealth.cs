@@ -5,12 +5,6 @@ using UnityEngine;
 namespace Assets.Scripts.Enemies
 {
     public class BossHealth : EnemyHealth {
-
-        public override void Start()
-        {
-            base.Start();
-        }
-
         public override void Die()
         {
             Debug.Log(_enemy.Buffs);
@@ -25,6 +19,6 @@ namespace Assets.Scripts.Enemies
             _currentHealth = 100;
         }
 
-        public ShrineManager.BossColour Colour;
+        public BossColour Colour;
     }
 }
