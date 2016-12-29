@@ -1,5 +1,5 @@
 ﻿
-namespace Gamestrap
+namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Global.Scripts
 {
     /// <summary>
     /// List of scenes used in the Example

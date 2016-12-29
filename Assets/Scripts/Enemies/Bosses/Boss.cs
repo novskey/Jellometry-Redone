@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Bosses
+namespace Assets.Scripts.Enemies.Bosses
 {
     public class Boss : MonoBehaviour, IEnemy
     {
@@ -43,7 +43,7 @@ namespace Assets.Scripts.Bosses
         {
             if (other.gameObject.tag == "Player")
             {
-                other.gameObject.GetComponent<Player>().ApplyDamage(Damage);
+                other.gameObject.GetComponent<Player.Player>().ApplyDamage(Damage);
             }
         }
 

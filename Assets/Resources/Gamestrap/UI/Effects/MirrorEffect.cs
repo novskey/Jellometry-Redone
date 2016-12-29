@@ -1,8 +1,8 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
-namespace Gamestrap.UI
+namespace Assets.Resources.Gamestrap.UI.Effects
 {
     [AddComponentMenu("UI/Gamestrap UI/Mirror")]
     public class MirrorEffect : GamestrapEffect

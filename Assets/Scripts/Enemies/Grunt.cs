@@ -1,6 +1,7 @@
-﻿using Assets.Scripts;
-using UnityEngine;
+﻿using UnityEngine;
 
+namespace Assets.Scripts.Enemies
+{
     public class Grunt : MonoBehaviour, IEnemy
     {
 
@@ -46,7 +47,7 @@ using UnityEngine;
         {
             if (other.gameObject.tag == "Player")
             {
-                other.gameObject.GetComponent<Player>().ApplyDamage(Damage);
+                other.gameObject.GetComponent<Player.Player>().ApplyDamage(Damage);
             }
         }
 
@@ -60,3 +61,4 @@ using UnityEngine;
         public float BaseSpeed { get; set; }
         public float BaseDamage { get; set; }
     }
+}

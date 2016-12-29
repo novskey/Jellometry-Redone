@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Weapons;
+using UnityEngine;
 
 namespace Assets.Scripts.Pickups.Structure
 {
@@ -28,7 +29,7 @@ namespace Assets.Scripts.Pickups.Structure
             Weapon.transform.position = other.gameObject.transform.FindChild("firePoint").position;
             Weapon.transform.rotation = new Quaternion(0,0,0,0);
 
-            other.gameObject.GetComponent<Player>().Weapon = Weapon.GetComponent<IWeapon>();
+            other.gameObject.GetComponent<Player.Player>().Weapon = Weapon.GetComponent<IWeapon>();
 
             Destroy(gameObject);
         }

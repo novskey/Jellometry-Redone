@@ -1,67 +1,68 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Managers;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class AreaSpawner : MonoBehaviour
+namespace Assets.Scripts.Spawning
 {
-    private Bounds[] _spawnAreas;
-
-    int _spawnCount = 0;
-
-
-    private PrefabManager _prefabManager;
-
-    // Use this for initialization
-    void Start ()
+    public class AreaSpawner : MonoBehaviour
     {
-        _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+        private Bounds[] _spawnAreas;
 
-        _spawnAreas = new Bounds[transform.childCount];
+        int _spawnCount = 0;
 
-	    for (int i = 0; i < transform.childCount; i++)
-	    {
-	        if (transform.GetChild(i).tag == "Spawn Zone")
-	        {
-	            _spawnCount++;
-	            _spawnAreas[i] = transform.GetChild(i).GetComponent<Collider>().bounds;
-	        }
-	    }
 
-	    Dictionary<string, int> dict = new Dictionary<string, int> {{"enemyTest", 20}};
-//	    StartCoroutine(SpawnEnemies(dict));
-	    }
+        private PrefabManager _prefabManager;
 
-    public IEnumerator SpawnEnemies(Dictionary<string, int> enemies)
-    {
-        foreach (KeyValuePair<string,int> kvPair in enemies)
+        // Use this for initialization
+        void Start ()
         {
-            for (int i = 0; i < kvPair.Value; i++)
+            _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+
+            _spawnAreas = new Bounds[transform.childCount];
+
+            for (int i = 0; i < transform.childCount; i++)
             {
-                Instantiate(_prefabManager.Get(kvPair.Key),RandomPoint(),transform.rotation);
+                if (transform.GetChild(i).tag == "Spawn Zone")
+                {
+                    _spawnCount++;
+                    _spawnAreas[i] = transform.GetChild(i).GetComponent<Collider>().bounds;
+                }
             }
         }
 
-        yield return null;
-    }
+        public IEnumerator SpawnEnemies(Dictionary<string, int> enemies)
+        {
+            foreach (KeyValuePair<string,int> kvPair in enemies)
+            {
+                for (int i = 0; i < kvPair.Value; i++)
+                {
+                    Instantiate(_prefabManager.Get(kvPair.Key),RandomPoint(),transform.rotation);
+                }
+            }
 
-    // Update is called once per frame
-	void Update () {
-	
-	}
+            yield return null;
+        }
 
-    public Vector3 RandomPoint()
-    {
-        Bounds bounds = _spawnAreas[Random.Range(0, _spawnCount)];
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float z = Random.Range(bounds.min.z, bounds.max.z);
+        // Update is called once per frame
+        void Update () {
 
-        return new Vector3(x,1f,z);
-    }
+        }
+
+        public Vector3 RandomPoint()
+        {
+            Bounds bounds = _spawnAreas[Random.Range(0, _spawnCount)];
+            float x = Random.Range(bounds.min.x, bounds.max.x);
+            float z = Random.Range(bounds.min.z, bounds.max.z);
+
+            return new Vector3(x,1f,z);
+        }
 
 
-    public void SpawnBoss(GameObject boss)
-    {
-        GameObject b = (GameObject) Instantiate(boss, RandomPoint(), transform.rotation);
+        public void SpawnBoss(GameObject boss)
+        {
+            GameObject b = (GameObject) Instantiate(boss, RandomPoint(), transform.rotation);
+        }
     }
 }

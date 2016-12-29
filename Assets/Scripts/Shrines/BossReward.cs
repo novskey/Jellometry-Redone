@@ -1,7 +1,9 @@
-﻿using Assets.Scripts.Pickups.Structure;
+﻿using Assets.Scripts.Enemies;
+using Assets.Scripts.Managers;
+using Assets.Scripts.Pickups.Structure;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Shrines
 {
     public class BossReward : MonoBehaviour
     {
@@ -13,7 +15,7 @@ namespace Assets.Scripts
 
         private GameObject _playerObj;
 
-        private Player _player;
+        private Player.Player _player;
 
         private Mod _mod;
 
@@ -22,7 +24,7 @@ namespace Assets.Scripts
         void Start()
         {
             _playerObj = GameObject.FindWithTag("Player");
-            _player = _playerObj.GetComponent<Player>();
+            _player = _playerObj.GetComponent<Player.Player>();
 
             _shrineManager = GameObject.Find("ShrineManager").GetComponent<ShrineManager>();
         }

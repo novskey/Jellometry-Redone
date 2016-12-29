@@ -1,54 +1,57 @@
-﻿using UnityEngine;
-using Assets.Scripts;
+﻿using Assets.Scripts.Managers;
+using UnityEngine;
 
-public class StartShrine : MonoBehaviour, IShrine
+namespace Assets.Scripts.Shrines
 {
-
-
-    public GameObject DefaultModel;
-    public GameObject ActivatedModel;
-
-    // Use this for initialization
-	void Start ()
-	{
-
-	    Health = 30;
-	    DefaultModel.SetActive(true);
-	    ActivatedModel.SetActive(false);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-    public void ApplyDamage(float damage)
+    public class StartShrine : MonoBehaviour, IShrine
     {
-        if (Health - damage <= 0)
+
+
+        public GameObject DefaultModel;
+        public GameObject ActivatedModel;
+
+        // Use this for initialization
+        void Start ()
         {
-            Activate();
+
+            Health = 30;
+            DefaultModel.SetActive(true);
+            ActivatedModel.SetActive(false);
         }
-        else
+	
+        // Update is called once per frame
+        void Update () {
+	
+        }
+
+        public void ApplyDamage(float damage)
         {
-            Health -= damage;
+            if (Health - damage <= 0)
+            {
+                Activate();
+            }
+            else
+            {
+                Health -= damage;
+            }
         }
-    }
 
-    public void Activate()
-    {
+        public void Activate()
+        {
 
-        Activated = true;
-        DefaultModel.SetActive(false);
-        ActivatedModel.SetActive(true);
+            Activated = true;
+            DefaultModel.SetActive(false);
+            ActivatedModel.SetActive(true);
 
-        GameObject.Find("WaveManager").GetComponent<WaveManager>().StartWave();
-    }
+            GameObject.Find("WaveManager").GetComponent<WaveManager>().StartWave();
+        }
 
-    public float Health { get; set; }
-    public bool Activated { get; set; }
+        public float Health { get; set; }
+        public bool Activated { get; set; }
 
-    public GameObject ActiveModel()
-    {
-        return Activated ? DefaultModel : ActivatedModel;
+        public GameObject ActiveModel()
+        {
+            return Activated ? DefaultModel : ActivatedModel;
+        }
     }
 }

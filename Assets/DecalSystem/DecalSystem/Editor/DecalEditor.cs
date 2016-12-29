@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Reflection;
+using Assets.DecalSystem.DecalSystem;
 
 [CustomEditor(typeof(Decal))]
 public class DecalEditor : Editor {	

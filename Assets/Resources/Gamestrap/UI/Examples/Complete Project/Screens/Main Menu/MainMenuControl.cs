@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Global.Scripts;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Gamestrap
+namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Screens.Main_Menu
 {
     public class MainMenuControl : MonoBehaviour
     {

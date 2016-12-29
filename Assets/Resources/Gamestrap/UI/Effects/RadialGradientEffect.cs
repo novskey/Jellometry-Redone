@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-
-namespace Gamestrap.UI
+namespace Assets.Resources.Gamestrap.UI.Effects
 {
     [AddComponentMenu("UI/Gamestrap UI/Directional Gradient")]
     public class RadialGradientEffect : GamestrapEffect

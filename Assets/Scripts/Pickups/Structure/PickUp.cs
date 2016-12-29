@@ -1,22 +1,27 @@
-﻿using UnityEngine;
+﻿using Assets.DecalSystem.DecalSystem;
+using Assets.Scripts.Managers;
+using UnityEngine;
 
-public class PickUp : MonoBehaviour {
+namespace Assets.Scripts.Pickups.Structure
+{
+    public class PickUp : MonoBehaviour {
 //    public PowerUp PowerUp;
 
 
-    public void CheckDecals()
-    {
-        foreach (GameObject decal in GameObject.Find("DecalManager").GetComponent<DecalManager>().GetDecals())
+        public void CheckDecals()
         {
-            float dist = (transform.position - decal.transform.position).sqrMagnitude;
-
-            if (dist < 5)
+            foreach (GameObject decal in GameObject.Find("DecalManager").GetComponent<DecalManager>().GetDecals())
             {
-                decal.GetComponent<Decal>().BuildDecal(decal.GetComponent<Decal>());
+                float dist = (transform.position - decal.transform.position).sqrMagnitude;
+
+                if (dist < 5)
+                {
+                    decal.GetComponent<Decal>().BuildDecal(decal.GetComponent<Decal>());
+                }
             }
         }
-    }
 
+    }
 }
 
 

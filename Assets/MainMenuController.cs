@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
-public class MainMenuController : MonoBehaviour {
+namespace Assets
+{
+    public class MainMenuController : MonoBehaviour {
 
-    public void ArenaClick(){}
+        public void ArenaClick(){}
 
 
+    }
 }

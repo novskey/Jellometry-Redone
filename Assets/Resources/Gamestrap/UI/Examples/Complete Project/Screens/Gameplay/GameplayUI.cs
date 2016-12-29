@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts;
+using UnityEngine;
 
-namespace Gamestrap
+namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Screens.Gameplay
 {
     public class GameplayUI : MonoBehaviour
     {

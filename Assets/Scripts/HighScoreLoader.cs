@@ -1,45 +1,48 @@
-﻿using UnityEngine;
-using Assets.Scripts.Managers;
+﻿using Assets.Scripts.Managers;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class HighScoreLoader : MonoBehaviour
+namespace Assets.Scripts
 {
-
-    public Transform Content;
-    public GameObject Text;
-
-    public void LoadScores()
+    public class HighScoreLoader : MonoBehaviour
     {
-        ClearScores();
 
-        StartCoroutine(DBInterface.Connect());
-        foreach (string[] highScore in DBInterface.GetHighScores())
+        public Transform Content;
+        public GameObject Text;
+
+        public void LoadScores()
         {
-            string name = highScore[0];
-            string score = highScore[1];
-            string time = highScore[2];
+            ClearScores();
 
-            GameObject nameText = (GameObject) Instantiate(Text, Content.FindChild("Name"));
-            GameObject scoreText = (GameObject) Instantiate(Text, Content.FindChild("Score"));
-            GameObject timeText = (GameObject) Instantiate(Text, Content.FindChild("Time"));
-
-            nameText.GetComponent<Text>().text = name;
-            scoreText.GetComponent<Text>().text = score;
-            timeText.GetComponent<Text>().text = time;
-        }
-        StartCoroutine(DBInterface.CloseConnection());
-    }
-
-    private void ClearScores()
-    {
-        for (int i = 0; i < Content.childCount; i++)
-        {
-            for (int j = 0; j < Content.GetChild(i).childCount; j++)
+            StartCoroutine(DBInterface.Connect());
+            foreach (string[] highScore in DBInterface.GetHighScores())
             {
-                Destroy(Content.GetChild(i).GetChild(j).gameObject);
-            }
+                string name = highScore[0];
+                string score = highScore[1];
+                string time = highScore[2];
 
-            Content.GetChild(i).DetachChildren();
+                GameObject nameText = (GameObject) Instantiate(Text, Content.FindChild("Name"));
+                GameObject scoreText = (GameObject) Instantiate(Text, Content.FindChild("Score"));
+                GameObject timeText = (GameObject) Instantiate(Text, Content.FindChild("Time"));
+
+                nameText.GetComponent<Text>().text = name;
+                scoreText.GetComponent<Text>().text = score;
+                timeText.GetComponent<Text>().text = time;
+            }
+            StartCoroutine(DBInterface.CloseConnection());
+        }
+
+        private void ClearScores()
+        {
+            for (int i = 0; i < Content.childCount; i++)
+            {
+                for (int j = 0; j < Content.GetChild(i).childCount; j++)
+                {
+                    Destroy(Content.GetChild(i).GetChild(j).gameObject);
+                }
+
+                Content.GetChild(i).DetachChildren();
+            }
         }
     }
 }

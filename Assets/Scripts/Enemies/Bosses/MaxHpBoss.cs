@@ -1,11 +1,12 @@
-﻿using Assets.Scripts.Bosses;
-
-public class MaxHpBoss : Boss
+﻿namespace Assets.Scripts.Enemies.Bosses
 {
-    new void Start()
+    public class MaxHpBoss : Boss
     {
-        base.Start();
-        Speed = BaseSpeed = 3f;
-        Damage = 10f;
+        new void Start()
+        {
+            base.Start();
+            Speed = BaseSpeed = 3f;
+            Damage = 10f;
+        }
     }
 }

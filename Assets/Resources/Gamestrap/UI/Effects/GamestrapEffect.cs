@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
-namespace Gamestrap.UI
+namespace Assets.Resources.Gamestrap.UI.Effects
 {
 #if UNITY_4_6 || UNITY_5_0 || UNITY_5_1
     public abstract class GamestrapEffect : BaseVertexEffect

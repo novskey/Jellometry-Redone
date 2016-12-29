@@ -1,14 +1,17 @@
-﻿public interface IWeapon
+﻿namespace Assets.Scripts.Weapons
 {
-    void Fire();
+    public interface IWeapon
+    {
+        void Fire();
 
-    float FireDelay{ get; set; }
-    float Damage { get; set; }
-    bool Ready { get; set; }
-    float BaseDamage { get; set; }
-    float BaseDelay { get; set; }
-    float Velocity { get; set; }
-    float BaseVelocity { get; set; }
+        float FireDelay{ get; set; }
+        float Damage { get; set; }
+        bool Ready { get; set; }
+        float BaseDamage { get; set; }
+        float BaseDelay { get; set; }
+        float Velocity { get; set; }
+        float BaseVelocity { get; set; }
 
-    void NotFiring();
+        void NotFiring();
+    }
 }

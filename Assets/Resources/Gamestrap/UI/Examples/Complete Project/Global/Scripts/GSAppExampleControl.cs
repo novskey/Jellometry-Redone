@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-#if !(UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+#if !(UNITY_4_6 || UNITY_5_0 || UNITY_5_1 || UNITY_5_2)
 #endif
-using System.Collections;
 
-namespace Gamestrap
+namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Global.Scripts
 {
     /// <summary>
     /// Main Control that handles all of the global Application logic, specially the scene transitions

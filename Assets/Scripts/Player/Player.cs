@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Managers;
 using Assets.Scripts.Pickups.Structure;
+using Assets.Scripts.Weapons;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Player
 {
     public class Player : MonoBehaviour
     {
@@ -43,7 +45,7 @@ namespace Assets.Scripts
             Debug.Log(_maxHealth);
             if (StartWithPistol)
             {
-                var pistolObj = Instantiate(Resources.Load<GameObject>("Prefabs/Weapons/pistol"));
+                var pistolObj = Instantiate(UnityEngine.Resources.Load<GameObject>("Prefabs/Weapons/pistol"));
                 pistolObj.transform.SetParent(transform);
                 pistolObj.transform.position = transform.FindChild("firePoint").position;
                 pistolObj.transform.rotation = new Quaternion(0,0,0,0);

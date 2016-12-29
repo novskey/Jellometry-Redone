@@ -16,14 +16,14 @@ namespace Assets.Scripts.Pickups.Structure
 
         private GameObject _playerObj;
 
-        private Player _player;
+        private Player.Player _player;
 
         private Mod _mod;
 
         public void Activate()
         {
             _playerObj = GameObject.Find("Player");
-            _player = _playerObj.GetComponent<Player>();
+            _player = _playerObj.GetComponent<Player.Player>();
             _mod = new Mod(Target, Modifier, Direct ? "direct" : "multiplier");
             _player.UpdateModifier(_mod, true);
         }

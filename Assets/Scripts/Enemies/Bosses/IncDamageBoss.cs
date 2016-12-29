@@ -1,11 +1,12 @@
-﻿using Assets.Scripts.Bosses;
-
-public class IncDamageBoss : Boss
+﻿namespace Assets.Scripts.Enemies.Bosses
 {
-    new void Start()
+    public class IncDamageBoss : Boss
     {
-        base.Start();
-        Speed = BaseSpeed = 4f;
-        Damage = 20f;
+        new void Start()
+        {
+            base.Start();
+            Speed = BaseSpeed = 4f;
+            Damage = 20f;
+        }
     }
 }

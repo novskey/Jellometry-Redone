@@ -1,123 +1,125 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
-using Assets.Scripts;
 using Assets.Scripts.Pickups.Structure;
+using UnityEngine;
 
-public class Laser : MonoBehaviour, IWeapon
+namespace Assets.Scripts.Weapons
 {
-
-    private LineRenderer _laser;
-
-    private bool _firing;
-
-    private int _penetration = 2;
-
-    private void Start()
+    public class Laser : MonoBehaviour, IWeapon
     {
-        Ready = true;
-        _laser = GetComponent<LineRenderer>();
-        _laser.SetVertexCount(2);
 
-        Damage = BaseDamage = 5;
+        private LineRenderer _laser;
 
-        FireDelay = BaseDelay = 0.3f;
+        private bool _firing;
 
-        Velocity = 0;
-    }
+        private int _penetration = 2;
 
-    public void Fire()
-    {
-        _firing = true;
-
-        RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward).OrderBy(h=>h.distance).ToArray();
-
-        if (hits.Length > 0)
+        private void Start()
         {
+            Ready = true;
+            _laser = GetComponent<LineRenderer>();
+            _laser.SetVertexCount(2);
 
-            _laser.SetPosition(0, transform.position);
+            Damage = BaseDamage = 5;
 
-            RaycastHit last = new RaycastHit();
+            FireDelay = BaseDelay = 0.3f;
 
-            int penetrated = 0;
+            Velocity = 0;
+        }
 
-            bool readyThisLoop = Ready;
+        public void Fire()
+        {
+            _firing = true;
 
-            bool firedThisLoop = false;
+            RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.forward).OrderBy(h=>h.distance).ToArray();
 
-            foreach (RaycastHit raycastHit in hits)
+            if (hits.Length > 0)
             {
-                if (raycastHit.transform.gameObject.tag == "Enemy" ||
-                    raycastHit.transform.gameObject.tag == "Shrine" && Ready)
+
+                _laser.SetPosition(0, transform.position);
+
+                RaycastHit last = new RaycastHit();
+
+                int penetrated = 0;
+
+                bool readyThisLoop = Ready;
+
+                bool firedThisLoop = false;
+
+                foreach (RaycastHit raycastHit in hits)
                 {
-                    if (readyThisLoop)
+                    if (raycastHit.transform.gameObject.tag == "Enemy" ||
+                        raycastHit.transform.gameObject.tag == "Shrine" && Ready)
                     {
-                        raycastHit.transform.gameObject.SendMessage("ApplyDamage", Damage);
-                        if (Player.StatModifiers[PlayerStat.SlowOnHit] > 1)
+                        if (readyThisLoop)
                         {
-                            raycastHit.transform.gameObject.SendMessage("ApplySlow", Player.StatModifiers[PlayerStat.SlowOnHit]);
+                            raycastHit.transform.gameObject.SendMessage("ApplyDamage", Damage);
+                            if (Player.Player.StatModifiers[PlayerStat.SlowOnHit] > 1)
+                            {
+                                raycastHit.transform.gameObject.SendMessage("ApplySlow", Player.Player.StatModifiers[PlayerStat.SlowOnHit]);
+                            }
+                            firedThisLoop = true;
                         }
-                        firedThisLoop = true;
+                        penetrated++;
                     }
-                    penetrated++;
+                    else if (raycastHit.transform.gameObject.tag == "Obstacle")
+                    {
+                        last = raycastHit;
+                        break;
+                    }
+
+                    if (penetrated >= _penetration)
+                    {
+                        last = raycastHit;
+                        _laser.SetPosition(1, raycastHit.point);
+                        break;
+                    }
                 }
-                else if (raycastHit.transform.gameObject.tag == "Obstacle")
+
+                if (firedThisLoop)
                 {
-                    last = raycastHit;
-                    break;
+                    Ready = false;
+                    StartCoroutine(Wait(FireDelay));
                 }
 
-                if (penetrated >= _penetration)
+                if (last.Equals(new RaycastHit()))
                 {
-                    last = raycastHit;
-                    _laser.SetPosition(1, raycastHit.point);
-                    break;
+                    _laser.SetPosition(1, hits.Last().point);
                 }
-            }
-
-            if (firedThisLoop)
-            {
-                Ready = false;
-                StartCoroutine(Wait(FireDelay));
-            }
-
-            if (last.Equals(new RaycastHit()))
-            {
-                _laser.SetPosition(1, hits.Last().point);
+                else
+                {
+                    _laser.SetPosition(1,last.point);
+                }
             }
             else
             {
-                _laser.SetPosition(1,last.point);
+                _firing = false;
             }
         }
-        else
+
+        private IEnumerator Wait(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            Ready = true;
+        }
+
+        private void Update()
+        {
+            _laser.enabled = _firing;
+        }
+
+        public float FireDelay { get; set; }
+        public float Damage { get; set; }
+        public bool Ready { get; set; }
+
+        public void NotFiring()
         {
             _firing = false;
         }
+
+        public float BaseDamage { get; set; }
+        public float BaseDelay { get; set; }
+        public float Velocity { get; set; }
+        public float BaseVelocity { get; set; }
     }
-
-    private IEnumerator Wait(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Ready = true;
-    }
-
-    private void Update()
-    {
-        _laser.enabled = _firing;
-    }
-
-    public float FireDelay { get; set; }
-    public float Damage { get; set; }
-    public bool Ready { get; set; }
-
-    public void NotFiring()
-    {
-        _firing = false;
-    }
-
-    public float BaseDamage { get; set; }
-    public float BaseDelay { get; set; }
-    public float Velocity { get; set; }
-    public float BaseVelocity { get; set; }
 }

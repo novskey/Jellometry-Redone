@@ -1,37 +1,40 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class PrefabManager : MonoBehaviour
+namespace Assets.Scripts.Managers
 {
-    public GameObject[] Prefabs = new GameObject[15];
-
-    public GameObject Get(String prefabName)
+    public class PrefabManager : MonoBehaviour
     {
-        foreach (GameObject prefab in Prefabs)
+        public GameObject[] Prefabs = new GameObject[15];
+
+        public GameObject Get(String prefabName)
         {
-            if (prefab.name == prefabName)
+            foreach (GameObject prefab in Prefabs)
             {
-                return prefab;
+                if (prefab.name == prefabName)
+                {
+                    return prefab;
+                }
             }
+
+            return new GameObject("empty");
         }
 
-        return new GameObject("empty");
-    }
-
-    public GameObject[] GetShrines()
-    {
-        List<GameObject> shrines = new List<GameObject>();
-        foreach (GameObject prefab in Prefabs)
+        public GameObject[] GetShrines()
         {
-            if (prefab == null) continue;
-
-            if (prefab.tag == "BossShrine")
+            List<GameObject> shrines = new List<GameObject>();
+            foreach (GameObject prefab in Prefabs)
             {
-                shrines.Add(prefab);
-            }
-        }
+                if (prefab == null) continue;
 
-        return shrines.ToArray();
+                if (prefab.tag == "BossShrine")
+                {
+                    shrines.Add(prefab);
+                }
+            }
+
+            return shrines.ToArray();
+        }
     }
 }

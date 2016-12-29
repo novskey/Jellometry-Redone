@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Gamestrap
+namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Global.Scripts
 {
     /// <summary>
     /// Script registers itself to the Buttons event on click and then calls the GSApplExample to do the transition automatically

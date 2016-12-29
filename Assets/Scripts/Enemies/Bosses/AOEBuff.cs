@@ -2,7 +2,7 @@
 using Assets.Scripts.Pickups.Structure;
 using UnityEngine;
 
-namespace Assets.Scripts.Bosses
+namespace Assets.Scripts.Enemies.Bosses
 {
     public class AOEBuff : MonoBehaviour
     {

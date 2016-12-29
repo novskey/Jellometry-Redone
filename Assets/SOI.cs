@@ -1,69 +1,72 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts;
-using Assets.Scripts.Bosses;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Enemies;
+using Assets.Scripts.Enemies.Bosses;
+using Assets.Scripts.Pickups.Structure;
+using UnityEngine;
 
-public class SOI : MonoBehaviour
+namespace Assets
 {
-
-    private AOEBuff _aoeBuff;
-
-    private Mod _mod;
-
-    private List<Collider> _buffedEnemies = new List<Collider>();
-
-    void Start()
+    public class SOI : MonoBehaviour
     {
-        _aoeBuff = transform.parent.GetComponent<AOEBuff>();
 
-        _mod = new Mod(_aoeBuff.Target, _aoeBuff.Modifier, _aoeBuff.Direct ? "direct" : "multiplier");
-    }
+        private AOEBuff _aoeBuff;
 
-    void OnCollisionEnter(Collision other)
-    {
-        Debug.Log(other.gameObject);
-    }
+        private Mod _mod;
 
-    void OnTriggerEnter(Collider other)
-    {
-        switch (other.tag)
+        private List<Collider> _buffedEnemies = new List<Collider>();
+
+        void Start()
         {
-            case "Player":
-                Debug.Log("Triggered by player");
-                break;
-            default:
-                if (other.tag == _aoeBuff.Tag)
-                {
-                    Debug.Log("Triggered by " + other.gameObject + ", applying buff");
-                    other.GetComponent<IEnemyHealth>().UpdateModifier(_mod, true);
-                    _buffedEnemies.Add(other);
-                }
-                break;
+            _aoeBuff = transform.parent.GetComponent<AOEBuff>();
+
+            _mod = new Mod(_aoeBuff.Target, _aoeBuff.Modifier, _aoeBuff.Direct ? "direct" : "multiplier");
         }
-    }
 
-    void OnTriggerExit(Collider other)
-    {
-        switch (other.tag)
+        void OnCollisionEnter(Collision other)
         {
-            case "Player":
-                Debug.Log("Player left");
-                break;
-            case "Enemy":
-                Debug.Log("Trigger by enemy, removing buff");
-                _buffedEnemies.Remove(other);
-                other.GetComponent<IEnemyHealth>().UpdateModifier(_mod, false);
-                break;
+            Debug.Log(other.gameObject);
         }
-    }
 
-    public void RemoveAllBuffs()
-    {
-        Debug.Log("Removing all buffs from " + _buffedEnemies.Count + " enemies");
-        foreach (Collider buffedEnemy in _buffedEnemies)
+        void OnTriggerEnter(Collider other)
         {
-            buffedEnemy.GetComponent<IEnemyHealth>().UpdateModifier(_mod,false);
+            switch (other.tag)
+            {
+                case "Player":
+                    Debug.Log("Triggered by player");
+                    break;
+                default:
+                    if (other.tag == _aoeBuff.Tag)
+                    {
+                        Debug.Log("Triggered by " + other.gameObject + ", applying buff");
+                        other.GetComponent<IEnemyHealth>().UpdateModifier(_mod, true);
+                        _buffedEnemies.Add(other);
+                    }
+                    break;
+            }
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            switch (other.tag)
+            {
+                case "Player":
+                    Debug.Log("Player left");
+                    break;
+                case "Enemy":
+                    Debug.Log("Trigger by enemy, removing buff");
+                    _buffedEnemies.Remove(other);
+                    other.GetComponent<IEnemyHealth>().UpdateModifier(_mod, false);
+                    break;
+            }
+        }
+
+        public void RemoveAllBuffs()
+        {
+            Debug.Log("Removing all buffs from " + _buffedEnemies.Count + " enemies");
+            foreach (Collider buffedEnemy in _buffedEnemies)
+            {
+                buffedEnemy.GetComponent<IEnemyHealth>().UpdateModifier(_mod,false);
+            }
         }
     }
 }

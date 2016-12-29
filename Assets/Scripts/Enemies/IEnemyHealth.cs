@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Pickups.Structure;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Enemies
 {
     public interface IEnemyHealth
     {
