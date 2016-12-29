@@ -10,7 +10,7 @@ namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Screens.Gamepl
 
         private static bool _pause;
 
-        private bool _canUnPause = true;
+//        private bool _canUnPause = true;
 
         /// <summary>
         /// It activates the pause animation in the pause panel

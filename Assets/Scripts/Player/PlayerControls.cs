@@ -1,5 +1,4 @@
-﻿using Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Screens.Gameplay;
-using Assets.Scripts.Weapons;
+﻿using Assets.Scripts.Weapons;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
@@ -8,13 +7,10 @@ namespace Assets.Scripts.Player
     {
         private Player _player;
 
-        private GameplayUI _gameplayUi;
-
         // Use this for initialization
         void Start ()
         {
             _player = GetComponentInParent<Player>();
-            _gameplayUi = GameObject.Find("UI Control").GetComponent<GameplayUI>();
         }
 	
         // Update is called once per frame

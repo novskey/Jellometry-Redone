@@ -62,7 +62,7 @@ namespace Assets.Scripts.Spawning
 
         public void SpawnBoss(GameObject boss)
         {
-            GameObject b = (GameObject) Instantiate(boss, RandomPoint(), transform.rotation);
+            Instantiate(boss, RandomPoint(), transform.rotation);
         }
     }
 }

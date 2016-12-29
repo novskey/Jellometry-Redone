@@ -12,7 +12,7 @@ namespace Assets
 
         private bool _selected;
 
-        void Start()
+        protected override void Start()
         {
             if (transform.GetChild(1).name == "Name")
             {
@@ -22,11 +22,6 @@ namespace Assets
             {
                 Type = MyType.KeyCode;
             }
-
-        }
-
-        void OnFocus()
-        {
 
         }
 

@@ -12,8 +12,6 @@ namespace Assets.Scripts.Shrines
         public GameObject Boss;
         public ShrineManager.BossColour Colour;
 
-        private BossReward _bossReward;
-
 //    public BossReward Reward;
 
         // Use this for initialization
@@ -65,7 +63,6 @@ namespace Assets.Scripts.Shrines
 
         public void SaveReward(BossReward reward)
         {
-            _bossReward = reward;
         }
     }
 }

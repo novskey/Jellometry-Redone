@@ -71,11 +71,10 @@ namespace Assets.DecalSystem.DecalSystem
             if (decal.Sprite)
                 GenerateTexCoords (startVertexCount, decal.Sprite);
             else {
-                Sprite fakeSprite = new Sprite();
                 int textureWidth = decal.Material.mainTexture.width;
                 int textureHeight = decal.Material.mainTexture.height;
                 Texture2D textureData = new Texture2D(textureWidth,textureHeight);
-                fakeSprite = Sprite.Create(textureData, new Rect(0,0,textureWidth,textureHeight), new Vector2(textureWidth/2,textureHeight/2));
+                Sprite.Create(textureData, new Rect(0,0,textureWidth,textureHeight), new Vector2(textureWidth/2,textureHeight/2));
                 GenerateTexCoords (startVertexCount, decal.Sprite);
             }
         }
