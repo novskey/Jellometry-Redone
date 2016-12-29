@@ -40,7 +40,7 @@ namespace Gamestrap
         {
             if (Input.anyKey)
             {
-                if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(PrefsManager.getKeyCode("Pause")))
+                if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(PrefsManager.GetKeyCode("Pause")))
                 {
                     Debug.Log("game paused?: " + Pause);
 

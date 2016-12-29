@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using Assets.Scripts;
+using Assets.Scripts.Pickups.Structure;
 
 public class Laser : MonoBehaviour, IWeapon
 {
@@ -20,6 +22,8 @@ public class Laser : MonoBehaviour, IWeapon
         Damage = BaseDamage = 5;
 
         FireDelay = BaseDelay = 0.3f;
+
+        Velocity = 0;
     }
 
     public void Fire()
@@ -49,6 +53,10 @@ public class Laser : MonoBehaviour, IWeapon
                     if (readyThisLoop)
                     {
                         raycastHit.transform.gameObject.SendMessage("ApplyDamage", Damage);
+                        if (Player.StatModifiers[PlayerStat.SlowOnHit] > 1)
+                        {
+                            raycastHit.transform.gameObject.SendMessage("ApplySlow", Player.StatModifiers[PlayerStat.SlowOnHit]);
+                        }
                         firedThisLoop = true;
                     }
                     penetrated++;
@@ -110,4 +118,6 @@ public class Laser : MonoBehaviour, IWeapon
 
     public float BaseDamage { get; set; }
     public float BaseDelay { get; set; }
+    public float Velocity { get; set; }
+    public float BaseVelocity { get; set; }
 }

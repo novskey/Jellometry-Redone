@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class Pistol : MonoBehaviour,IWeapon
 {
-    private float _velocity = 70f;
     private Rigidbody _bullet;
+
+
+    private PrefabManager _prefabManager;
 
     // Use this for initialization
     void Start ()
     {
+        _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
 
-        PrefabManager prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
-
-        _bullet = prefabManager.Get("bullet").GetComponent<Rigidbody>();
+        _bullet = _prefabManager.Get("bullet").GetComponent<Rigidbody>();
         _bullet.GetComponent<Projectile>().SetDamage(Damage);
 
         Ready = true;
@@ -20,6 +21,8 @@ public class Pistol : MonoBehaviour,IWeapon
         Damage = BaseDamage  = 10;
 
         FireDelay = BaseDelay = 0.5f;
+
+        Velocity = BaseVelocity = 70f;
     }
 
     public void Fire()
@@ -29,7 +32,7 @@ public class Pistol : MonoBehaviour,IWeapon
             Rigidbody projClone = (Rigidbody) Instantiate(_bullet, transform.position, transform.rotation);
             projClone.GetComponent<Projectile>().SendMessage("SetDamage", Damage);
             projClone.GetComponent<Projectile>().SendMessage("SetOwner",transform.parent);
-            projClone.velocity = transform.forward * _velocity;
+            projClone.velocity = transform.forward * Velocity;
             Destroy(projClone, 10);
             Ready = false;
             StartCoroutine(Wait(FireDelay));
@@ -53,4 +56,6 @@ public class Pistol : MonoBehaviour,IWeapon
 
     public float BaseDamage { get; set; }
     public float BaseDelay { get; set; }
+    public float Velocity { get; set; }
+    public float BaseVelocity { get; set; }
 }

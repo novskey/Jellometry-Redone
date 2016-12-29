@@ -24,9 +24,14 @@ public class PrefsManager : MonoBehaviour
 	    }
 	}
 
-    public static KeyCode getKeyCode(string key)
+    public static KeyCode GetKeyCode(string key)
     {
         return (KeyCode) PlayerPrefs.GetInt(key);
+    }
+
+    public static string GetName()
+    {
+        return PlayerPrefs.GetString("Name");
     }
 
     public void SaveOptions()
@@ -38,15 +43,16 @@ public class PrefsManager : MonoBehaviour
         {
             if (PrefBoxes.GetChild(i).GetChild(0).GetChild(0).childCount == 3)
             {
-                Text text = PrefBoxes.GetChild(i).GetChild(0).GetChild(0).GetChild(2).GetComponent<Text>();
-                Debug.Log("setting: " + text.name + " to " + text.text);
-                if (text.name != "Name")
+                string text = PrefBoxes.GetChild(i).GetChild(0).GetChild(0).GetComponent<InputField>().text;
+                string name = PrefBoxes.GetChild(i).name;
+                Debug.Log("setting: " + name + " to " + text);
+                if (name != "Name")
                 {
-                    PlayerPrefs.SetInt(text.name, (int) EnumUtils.ParseEnum<KeyCode>(text.text));
+                    PlayerPrefs.SetInt(name, (int) EnumUtils.ParseEnum<KeyCode>(text));
                 }
                 else
                 {
-                    PlayerPrefs.SetString(text.name, text.text);
+                    PlayerPrefs.SetString(name, text);
                 }
             }
         }

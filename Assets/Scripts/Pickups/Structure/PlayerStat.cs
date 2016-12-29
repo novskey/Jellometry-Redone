@@ -6,6 +6,9 @@
         Speed,
         Damage,
         Attackspeed,
-        ScoreEarned
+        ScoreEarned,
+        ProjectileSpeed,
+        HpRegen,
+        SlowOnHit
     }
 }

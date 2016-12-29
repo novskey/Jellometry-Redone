@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts;
+using Assets.Scripts.Pickups.Structure;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class Projectile : MonoBehaviour
@@ -7,10 +9,13 @@ public class Projectile : MonoBehaviour
     private float _damage;
     private Transform _owner;
 
-    private PrefabManager _prefabManager;
     private GameObject _splatObj;
 
-    private void Start()
+
+    private PrefabManager _prefabManager;
+
+    // Use this for initialization
+    void Start ()
     {
         _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
         _splatObj = _prefabManager.Get("Splat");
@@ -23,15 +28,19 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(other.transform);
+//        Debug.Log(other.transform);
         if (other.transform == _owner) return;
         if (other.gameObject.tag == "Player")
         {
             other.gameObject.SendMessage("ApplyDamage",_damage);
         }else if (other.gameObject.tag == "Enemy")
         {
-            Debug.Log("Enemy hit");
+//            Debug.Log("Enemy hit");
             other.gameObject.SendMessage("ApplyDamage",_damage);
+            if (Player.StatModifiers[PlayerStat.SlowOnHit] > 1)
+            {
+                other.gameObject.SendMessage("ApplySlow", Player.StatModifiers[PlayerStat.SlowOnHit]);
+            }
         }else if (other.gameObject.tag == "Decal")
         {
             Destroy(other.gameObject);
@@ -50,7 +59,7 @@ public class Projectile : MonoBehaviour
     public void SetOwner(Transform owner)
     {
         _owner = owner;
-        Debug.Log("set owner to: " + owner);
+//        Debug.Log("set owner to: " + owner);
     }
 
     void CreateSplat(Collision collision)

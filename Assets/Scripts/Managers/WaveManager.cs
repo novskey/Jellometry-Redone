@@ -5,20 +5,23 @@ using UnityEngine.UI;
 public class WaveManager : MonoBehaviour
 {
     private int _wave = 0;
-    private ShrineManager _shrineManager;
     private AreaSpawner[] _spawners;
 
     public Text WaveText;
 
-    public int RemainingEnemies;
+    public static int RemainingEnemies;
 
     private List<GameObject> _nextWaveBosses = new List<GameObject>();
 
+    private ShrineManager _shrineManager;
+
     // Use this for initialization
 	void Start () {
-	    _shrineManager = GameObject.Find("ShrineManager").GetComponent<ShrineManager>();
 
 	    GameObject[] spawnZones = GameObject.FindGameObjectsWithTag("SpawnZone");
+
+	    _shrineManager = GameObject.Find("ShrineManager").GetComponent<ShrineManager>();
+
 	    _spawners = new AreaSpawner[spawnZones.Length];
 
 	    for (int i = 0; i < spawnZones.Length; i++)

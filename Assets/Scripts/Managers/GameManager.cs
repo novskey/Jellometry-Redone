@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Assets.Scripts;
+using Assets.Scripts.Managers;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -9,20 +11,26 @@ public class GameManager : MonoBehaviour
     public Text TimeText;
     public Text HealthText;
 
-    private int _score;
+    private static int _score;
     private float _startTime;
     private bool _gamestarted;
 
     private bool _paused;
+    public Player _player;
+
+    private static Dictionary<EnemyType, float> _enemyScores = new Dictionary<EnemyType, float>
+    {
+        {EnemyType.Grunt, 20},
+        {EnemyType.Boss, 100}
+    };
+
     private WaveManager _waveManager;
-    private Player _player;
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         _waveManager = GameObject.Find("WaveManager").GetComponent<WaveManager>();
         _waveManager.WaveSetup();
-
-        _player = GameObject.Find("player").GetComponent<Player>();
 
         Debug.Log(PlayerPrefs.GetString("Name"));
     }
@@ -52,10 +60,11 @@ public class GameManager : MonoBehaviour
 
     public void UpdateHealth()
     {
+        Debug.Log(_player);
         HealthText.text = _player.Health().ToString();
     }
 
-    void UpdateScore ()
+    public void UpdateScore ()
     {
         ScoreText.text = _score.ToString();
     }
@@ -86,18 +95,13 @@ public class GameManager : MonoBehaviour
 
     public void EnemyKilled(IEnemy enemyInfo)
     {
-        int points = 0;
-        switch (enemyInfo.Type)
-        {
-            case EnemyType.Grunt:
-                points = 20 * enemyInfo.Buffs;
-                break;
-        }
+        int points = (int) (_enemyScores[enemyInfo.GetType()] * (enemyInfo.Buffs + 1));
 
+        Debug.Log(enemyInfo.Buffs);
         _waveManager.EnemyKilled();
 
         points = (int) (points* _player.ScoreMultiplier());
-        Debug.Log("Player killed a: " + enemyInfo.Type + " worth " + points);
+        Debug.Log("Player killed a: " + enemyInfo.GetType() + " worth " + points);
 
         _score += points;
         UpdateScore();
@@ -115,6 +119,14 @@ public class GameManager : MonoBehaviour
             _paused = true;
             Time.timeScale = 0;
         }
+    }
+
+    public void GameOver()
+    {
+        Destroy(_player.gameObject);
+        StartCoroutine(DBInterface.Connect());
+        StartCoroutine(DBInterface.SaveScore(PrefsManager.GetName(),_score));
+        StartCoroutine(DBInterface.CloseConnection());
     }
 
 }

@@ -25,15 +25,14 @@ namespace Assets.Scripts.Pickups.Structure
             _playerObj = GameObject.Find("Player");
             _player = _playerObj.GetComponent<Player>();
             _mod = new Mod(Target, Modifier, Direct ? "direct" : "multiplier");
-            _player.SendMessage("AddModifier",_mod);
-
+            _player.UpdateModifier(_mod, true);
         }
 
         public IEnumerator Remove() {
             Debug.Log("Start remove");
             yield return new WaitForSeconds(Duration);
             Debug.Log("Removing");
-            _player.SendMessage("RemoveModifier", _mod);
+            _player.UpdateModifier(_mod, false);
         }
 
         private void OnCollisionEnter(Collision other)

@@ -7,6 +7,8 @@
     bool Ready { get; set; }
     float BaseDamage { get; set; }
     float BaseDelay { get; set; }
+    float Velocity { get; set; }
+    float BaseVelocity { get; set; }
 
     void NotFiring();
 }

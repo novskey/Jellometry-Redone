@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Pickups.Structure;
 using UnityEngine;
 
@@ -8,13 +10,10 @@ namespace Assets.Scripts
     public class Player : MonoBehaviour
     {
 
-        private float _baseHealth = 100;
-        private float _maxHealth = 100;
-        private float _currentHealth = 100;
+        private float _baseHealth = 100, _maxHealth = 100;
+        private int  _currentHealth = 100;
 
-        public float BaseSpeed = 7f;
-
-        public float Speed = 7f;
+        public float BaseSpeed, Speed = 7f;
 
         public IWeapon Weapon;
 
@@ -22,18 +21,26 @@ namespace Assets.Scripts
 
         private GameManager _gameManager;
 
-        private Dictionary<PlayerStat, float> _statModifiers = new Dictionary<PlayerStat, float>()
+        public float[] Modifiers;
+
+        public static Dictionary<PlayerStat, float> StatModifiers = new Dictionary<PlayerStat, float>()
         {
             {PlayerStat.Hp, 1},
             {PlayerStat.Speed, 1},
             {PlayerStat.Damage, 1},
             {PlayerStat.Attackspeed, 1},
-            {PlayerStat.ScoreEarned, 1}
+            {PlayerStat.ScoreEarned, 1},
+            {PlayerStat.HpRegen, 0},
+            {PlayerStat.ProjectileSpeed, 1},
+            {PlayerStat.SlowOnHit, 1}
         };
+
+        private bool _canRegen = true;
 
         // Use this for initialization
         void Start ()
         {
+            Debug.Log(_maxHealth);
             if (StartWithPistol)
             {
                 var pistolObj = Instantiate(Resources.Load<GameObject>("Prefabs/Weapons/pistol"));
@@ -45,20 +52,28 @@ namespace Assets.Scripts
             }
 
             _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+            _gameManager.UpdateHealth();
         }
 
-        void AddModifier(Mod modifier)
+        public void UpdateModifier(Mod modifier, bool add)
         {
             if (modifier.Type != "direct")
             {
-                _statModifiers[modifier.Target] += modifier.Modifier;
+                if (add) StatModifiers[modifier.Target] += modifier.Modifier;
+                else StatModifiers[modifier.Target] -= modifier.Modifier;
             }
             else
             {
                 switch (modifier.Target)
                 {
                     case PlayerStat.Hp:
-                        _currentHealth = Math.Min(modifier.Modifier,_maxHealth);
+                        if(add)  _currentHealth = (int) Math.Min(modifier.Modifier, _maxHealth);
+                        else _currentHealth = (int) (_currentHealth - modifier.Modifier);
+                        break;
+                    case PlayerStat.HpRegen:
+                        if(add) StatModifiers[modifier.Target] += modifier.Modifier;
+                        else StatModifiers[modifier.Target] -= modifier.Modifier;
                         break;
                     default:
                         Debug.Log("not accounted for");
@@ -67,143 +82,20 @@ namespace Assets.Scripts
             }
 
             UpdateStats();
-
-//        switch
-//
-//        (modifier.Target)
-//            {
-//                case PlayerStat.Hp:
-//
-//                    if (modifier.Type == "direct")
-//                    {
-//                        _health += modifier.Modifier;
-//                    }
-//                    else
-//                    {
-//                        _health = (int)(_health * modifier.Modifier);
-//                    }
-//                    break;
-//                case PlayerStat.Attackspeed:
-//                    if (modifier.Type == "direct")
-//                    {
-//                        Weapon.FireDelay -= modifier.Modifier;
-//                    }else{
-//                        Weapon.FireDelay /= modifier.Modifier;
-//                    }
-//                    Debug.Log(Weapon.FireDelay);
-//                    break;
-//                case PlayerStat.Speed:
-//                    if (modifier.Type == "direct")
-//                    {
-//                        Speed += modifier.Modifier;
-//                    }else{
-//                        Speed *= modifier.Modifier;
-//                    }
-//                    Debug.Log(Speed);
-//                    break;
-//                case PlayerStat.Damage:
-//                    if (modifier.Type == "direct")
-//                    {
-//                        Weapon.Damage += modifier.Modifier;
-//                    }else{
-//                        Weapon.Damage *= modifier.Modifier;
-//                    }
-//                    Debug.Log(Speed);
-//                    break;
-//                case PlayerStat.ScoreEarned:
-//                    if (modifier.Type == "direct")
-//                    {
-//                        ScoreMultiplier += modifier.Modifier;
-//                    }else{
-//                        ScoreMultiplier *= modifier.Modifier;
-//                    }
-//                    break;
-//            }
         }
 
         private void UpdateStats()
         {
-            Speed = BaseSpeed * _statModifiers[PlayerStat.Speed];
-            Weapon.Damage = Weapon.BaseDamage * _statModifiers[PlayerStat.Damage];
-            Weapon.FireDelay = Weapon.BaseDelay / _statModifiers[PlayerStat.Attackspeed];
-            _maxHealth = _baseHealth * _statModifiers[PlayerStat.Hp];
-        }
-
-        void RemoveModifier(Mod modifier)
-        {
-            if (modifier.Type != "direct")
+            Speed = BaseSpeed * StatModifiers[PlayerStat.Speed];
+            Weapon.Damage = Weapon.BaseDamage * StatModifiers[PlayerStat.Damage];
+            Weapon.FireDelay = Weapon.BaseDelay / StatModifiers[PlayerStat.Attackspeed];
+            if (Weapon.Velocity != 0)
             {
-                _statModifiers[modifier.Target] -= modifier.Modifier;
+                Weapon.Velocity = Weapon.BaseVelocity * StatModifiers[PlayerStat.ProjectileSpeed];
             }
-            else
-            {
-                switch (modifier.Target)
-                {
-                    case PlayerStat.Hp:
-                        _currentHealth -= modifier.Modifier;
-                        break;
-                    default:
-                        Debug.Log("not accounted for");
-                        break;
-                }
-            }
+            _maxHealth = _baseHealth * StatModifiers[PlayerStat.Hp];
 
-            UpdateStats();
-
-//            switch (modifier.Target)
-//            {
-//                case PlayerStat.Hp:
-//                    Debug.Log(_health);
-//
-//                    if (modifier.Type == "direct")
-//                    {
-//                        _health -= modifier.Modifier;
-//                    }
-//                    else
-//                    {
-//                        _health = (int)(_health / modifier.Modifier);
-//                    }
-//
-//                    Debug.Log(_health);
-//                    break;
-//                case PlayerStat.Attackspeed:
-//                    Debug.Log(Weapon.FireDelay);
-//                    if (modifier.Type == "direct")
-//                    {
-//                        Weapon.FireDelay += modifier.Modifier;
-//                    }else{
-//                        Weapon.FireDelay *= modifier.Modifier;
-//                    }
-//                    Debug.Log(Weapon.FireDelay);
-//                    break;
-//                case PlayerStat.Speed:
-//                    Debug.Log(Speed);
-//                    if (modifier.Type == "direct")
-//                    {
-//                        Speed -= modifier.Modifier;
-//                    }else{
-//                        Speed /= modifier.Modifier;
-//                    }
-//                    Debug.Log(Speed);
-//                    break;
-//                case PlayerStat.Damage:
-//                    if (modifier.Type == "direct")
-//                    {
-//                        Weapon.Damage -= modifier.Modifier;
-//                    }else{
-//                        Weapon.Damage /= modifier.Modifier;
-//                    }
-//                    Debug.Log(Speed);
-//                    break;
-//                case PlayerStat.ScoreEarned:
-//                    if (modifier.Type == "direct")
-//                    {
-//                        ScoreMultiplier -= modifier.Modifier;
-//                    }else{
-//                        ScoreMultiplier /= modifier.Modifier;
-//                    }
-//                    break;
-//            }
+            Modifiers = StatModifiers.Values.ToArray();
         }
 
         public void ApplyDamage(float damage)
@@ -211,10 +103,11 @@ namespace Assets.Scripts
             if (_currentHealth - damage <= 0)
             {
                 _currentHealth = 0;
+                _gameManager.GameOver();
             }
             else
             {
-                _currentHealth -= damage;
+                _currentHealth = (int) (_currentHealth - damage);
             }
 
             Debug.Log("player hit");
@@ -229,7 +122,27 @@ namespace Assets.Scripts
 
         public float ScoreMultiplier()
         {
-            return _statModifiers[PlayerStat.ScoreEarned];
+            return StatModifiers[PlayerStat.ScoreEarned];
         }
+
+        void FixedUpdate()
+        {
+            if (StatModifiers[PlayerStat.HpRegen] > 0 && _canRegen && _currentHealth < _maxHealth)
+            {
+                Debug.Log("Regenning health");
+                StartCoroutine(RegenHp(1));
+            }
+        }
+
+        private IEnumerator RegenHp(float delay)
+        {
+            _canRegen = false;
+            yield return new WaitForSeconds(delay);
+            _currentHealth = (int) Math.Min(_currentHealth + StatModifiers[PlayerStat.HpRegen], _maxHealth);
+            _gameManager.UpdateHealth();
+            Debug.Log("done!");
+            _canRegen = true;
+        }
+
     }
 }

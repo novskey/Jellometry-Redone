@@ -7,17 +7,17 @@ public class AreaSpawner : MonoBehaviour
 {
     private Bounds[] _spawnAreas;
 
-    private PrefabManager _prefabManager;
-
-
     int _spawnCount = 0;
 
-    // Use this for initialization
-	void Start ()
-	{
-	    _spawnAreas = new Bounds[transform.childCount];
 
-	    _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+    private PrefabManager _prefabManager;
+
+    // Use this for initialization
+    void Start ()
+    {
+        _prefabManager = GameObject.Find("PrefabManager").GetComponent<PrefabManager>();
+
+        _spawnAreas = new Bounds[transform.childCount];
 
 	    for (int i = 0; i < transform.childCount; i++)
 	    {

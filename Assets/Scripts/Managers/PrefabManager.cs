@@ -16,7 +16,7 @@ public class PrefabManager : MonoBehaviour
             }
         }
 
-        return gameObject;
+        return new GameObject("empty");
     }
 
     public GameObject[] GetShrines()

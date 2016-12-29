@@ -8,7 +8,7 @@ namespace Gamestrap
         private static int _visibleVariable = Animator.StringToHash("Visible");
         private static int _notifyVariable = Animator.StringToHash("Notify");
 
-        public GameObject SettingsPanel, AboutPanel;
+        public GameObject SettingsPanel, AboutPanel, LeaderboardPanel;
 
         public Toggle SoundToggle, MusicToggle;
 
@@ -36,16 +36,15 @@ namespace Gamestrap
             _notificationAnimator.SetTrigger(_notifyVariable);
         }
 
-        public void LeaderboardClick()
+        public void ToggleLeaderboard()
         {
-            NotificationText.text = "Leaderboard Clicked...";
-            _notificationAnimator.SetTrigger(_notifyVariable);
+            TogglePanel(LeaderboardPanel.GetComponent<Animator>());
+
+
         }
 
         public void RateClick()
         {
-            NotificationText.text = "Rate Clicked...";
-            _notificationAnimator.SetTrigger(_notifyVariable);
         }
 
         #region Settings Events

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts;
+using Gamestrap;
 
 public class ShrineManager : MonoBehaviour
 {
@@ -14,7 +15,8 @@ public class ShrineManager : MonoBehaviour
         White,
         Orange,
         Red,
-        Aqua
+        Aqua,
+        DarkGreen
     }
 
     public Dictionary<BossColour, int> ShrineLevels = new Dictionary<BossColour, int>
@@ -26,13 +28,15 @@ public class ShrineManager : MonoBehaviour
         {BossColour.White,0},
         {BossColour.Orange, 0},
         {BossColour.Red, 0},
+        {BossColour.DarkGreen, 0},
         {BossColour.Aqua, 0}
     };
 
-    private GameObject[] _shrineObjects;
-    private PrefabManager _prefabManager;
+    private static GameObject[] _shrineObjects;
 
     public Vector3[] ShrineSpots = new Vector3[4];
+
+    private PrefabManager _prefabManager;
 
 	// Use this for initialization
 	void Start ()
@@ -46,7 +50,7 @@ public class ShrineManager : MonoBehaviour
 	
 	}
 
-    public GameObject RandomShrine()
+    public static GameObject RandomShrine()
     {
         int index = Random.Range(0, _shrineObjects.Length);
 
@@ -81,7 +85,7 @@ public class ShrineManager : MonoBehaviour
 
     public int ShrineLevel(BossColour colour)
     {
-        return ShrineLevels[colour];
+        return  ShrineLevels[colour];
     }
 
     public void SpawnShrines()
@@ -96,10 +100,10 @@ public class ShrineManager : MonoBehaviour
                 randShrine = RandomShrine();
             } while (spawnedShrines.Contains(randShrine.GetComponent<BossShrine>().Colour));
 
-            Instantiate(randShrine, ShrineSpots[i], transform.rotation);
+            Instantiate(randShrine, ShrineSpots[i], Quaternion.identity);
             spawnedShrines.Add(randShrine.GetComponent<BossShrine>().Colour);
         }
 
-        Instantiate(_prefabManager.Get("start shrine"), transform.position, transform.rotation);
+        Instantiate(_prefabManager.Get("start shrine"), Vector3.zero, Quaternion.identity);
     }
 }

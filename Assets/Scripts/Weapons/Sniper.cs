@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using Assets.Scripts;
+using Assets.Scripts.Pickups.Structure;
 
 public class Sniper : MonoBehaviour, IWeapon {
 
@@ -19,6 +21,8 @@ public class Sniper : MonoBehaviour, IWeapon {
 
         Damage = BaseDamage  = 50;
         FireDelay = BaseDelay = 2f;
+
+        Velocity = 0;
     }
 
     public void Fire()
@@ -39,6 +43,10 @@ public class Sniper : MonoBehaviour, IWeapon {
                 if ((hits[i].transform.gameObject.tag == "Enemy" || hits[i].transform.gameObject.tag == "Shrine") && Ready)
                 {
                     hits[i].transform.gameObject.SendMessage("ApplyDamage",Damage);
+                    if (Player.StatModifiers[PlayerStat.SlowOnHit] > 1)
+                    {
+                        hits[i].transform.gameObject.SendMessage("ApplySlow", Player.StatModifiers[PlayerStat.SlowOnHit]);
+                    }
                     penetrated++;
                 }
 
@@ -94,4 +102,6 @@ public class Sniper : MonoBehaviour, IWeapon {
 
     public float BaseDamage { get; set; }
     public float BaseDelay { get; set; }
+    public float Velocity { get; set; }
+    public float BaseVelocity { get; set; }
 }

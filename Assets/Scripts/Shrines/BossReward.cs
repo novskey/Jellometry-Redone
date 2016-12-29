@@ -33,15 +33,18 @@ namespace Assets.Scripts
             Debug.Log("boss colour: " + GetComponent<BossHealth>().Colour);
             int level = _shrineManager.ShrineLevel(GetComponent<BossHealth>().Colour);
 
-            if (level > 0)
-            {
-                _player.SendMessage("RemoveModifier",_mod);
-            }
 
             Debug.Log(transform + " activating at level: " + level);
-            _mod = new Mod(Target, Modifiers[level], Direct ? "direct" : "multiplier");
-            _player.SendMessage("AddModifier",_mod);
 
+            if (level > 0)
+            {
+                _mod = new Mod(Target, Modifiers[level] - Modifiers[level - 1], Direct ? "direct" : "multiplier");
+            }
+            else
+            {
+                _mod = new Mod(Target, Modifiers[level], Direct ? "direct" : "multiplier");
+            }
+            _player.UpdateModifier(_mod,true);
 
             GameObject.Find("ShrineManager").GetComponent<ShrineManager>().ShrineLevels[GetComponent<BossHealth>().Colour]++;
         }

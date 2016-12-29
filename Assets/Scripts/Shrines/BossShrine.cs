@@ -43,7 +43,7 @@ public class BossShrine : MonoBehaviour, IShrine
 
     public void Activate()
     {
-        Debug.Log("big bnoi");
+//        Debug.Log("big bnoi");
         DefaultModel.SetActive(false);
         ActivatedModel.SetActive(true);
 

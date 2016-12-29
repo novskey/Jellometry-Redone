@@ -1,6 +1,6 @@
 ﻿using Assets.Scripts.Pickups.Structure;
 
-class Mod
+public class Mod
 {
     public PlayerStat Target;
     public float Modifier;
