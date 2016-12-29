@@ -7,7 +7,7 @@ using UnityNpgsqlTypes;
 
 namespace Assets.Scripts.Managers
 {
-    public class DBInterface
+    public class DbInterface
     {
         private static NpgsqlConnection _conn;
 

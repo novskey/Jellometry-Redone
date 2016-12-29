@@ -125,9 +125,9 @@ namespace Assets.Scripts.Managers
         public void GameOver()
         {
             Destroy(_player.gameObject);
-            StartCoroutine(DBInterface.Connect());
-            StartCoroutine(DBInterface.SaveScore(PrefsManager.GetName(),_score));
-            StartCoroutine(DBInterface.CloseConnection());
+            StartCoroutine(DbInterface.Connect());
+            StartCoroutine(DbInterface.SaveScore(PrefsManager.GetName(),_score));
+            StartCoroutine(DbInterface.CloseConnection());
         }
 
     }

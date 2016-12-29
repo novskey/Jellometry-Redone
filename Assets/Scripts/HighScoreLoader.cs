@@ -14,8 +14,8 @@ namespace Assets.Scripts
         {
             ClearScores();
 
-            StartCoroutine(DBInterface.Connect());
-            foreach (string[] highScore in DBInterface.GetHighScores())
+            StartCoroutine(DbInterface.Connect());
+            foreach (string[] highScore in DbInterface.GetHighScores())
             {
                 string name = highScore[0];
                 string score = highScore[1];
@@ -29,7 +29,7 @@ namespace Assets.Scripts
                 scoreText.GetComponent<Text>().text = score;
                 timeText.GetComponent<Text>().text = time;
             }
-            StartCoroutine(DBInterface.CloseConnection());
+            StartCoroutine(DbInterface.CloseConnection());
         }
 
         private void ClearScores()
