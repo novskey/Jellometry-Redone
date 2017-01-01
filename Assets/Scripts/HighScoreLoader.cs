@@ -10,16 +10,29 @@ namespace Assets.Scripts
         public Transform Content;
         public GameObject Text;
 
+        private HSController _hsController;
+
+        void Start()
+        {
+            _hsController = GameObject.Find("HSController").GetComponent<HSController>();
+        }
+
         public void LoadScores()
+        {
+            StartCoroutine(_hsController.ReturnScores());
+        }
+
+        public void DisplayScores(string[][] highScores)
         {
             ClearScores();
 
-            StartCoroutine(DbInterface.Connect());
-            foreach (string[] highScore in DbInterface.GetHighScores())
+            foreach (string[] highScore in highScores)
             {
                 string name = highScore[0];
+                Debug.Log(name);
+
                 string score = highScore[1];
-                string time = highScore[2];
+                string time = highScore[2].Substring(0,highScore[2].IndexOf(" "));
 
                 GameObject nameText = (GameObject) Instantiate(Text, Content.FindChild("Name"));
                 GameObject scoreText = (GameObject) Instantiate(Text, Content.FindChild("Score"));
@@ -29,7 +42,6 @@ namespace Assets.Scripts
                 scoreText.GetComponent<Text>().text = score;
                 timeText.GetComponent<Text>().text = time;
             }
-            StartCoroutine(DbInterface.CloseConnection());
         }
 
         private void ClearScores()
