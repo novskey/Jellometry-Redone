@@ -22,19 +22,19 @@ namespace Assets.Scripts.Player
             {
                 if (Input.GetKey(PrefsManager.GetKeyCode("Forward")))
                 {
-                    transform.Translate(Vector3.forward * speedChanged);
+                    transform.Translate(PrefsManager.Forward() * speedChanged);
                 }
                 if (Input.GetKey(PrefsManager.GetKeyCode("Left")))
                 {
-                    transform.Translate(Vector3.left * speedChanged);
+                    transform.Translate(PrefsManager.Left() * speedChanged);
                 }
                 if (Input.GetKey(PrefsManager.GetKeyCode("Back")))
                 {
-                    transform.Translate(-Vector3.forward * speedChanged);
+                    transform.Translate(-PrefsManager.Forward() * speedChanged);
                 }
                 if (Input.GetKey(PrefsManager.GetKeyCode("Right")))
                 {
-                    transform.Translate(Vector3.right * speedChanged);
+                    transform.Translate(PrefsManager.Right() * speedChanged);
                 }
                 if (Input.GetKey(PrefsManager.GetKeyCode("Shoot")))
                 {

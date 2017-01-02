@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.DecalSystem.DecalSystem;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers

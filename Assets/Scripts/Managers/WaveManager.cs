@@ -5,6 +5,7 @@ using System.Linq;
 using Assets.Scripts.Enemies;
 using Assets.Scripts.Enemies.Bosses;
 using Assets.Scripts.Pickups.Structure;
+using Assets.Scripts.Shrines;
 using Assets.Scripts.Spawning;
 using UnityEngine;
 using UnityEngine.UI;
@@ -132,8 +133,8 @@ namespace Assets.Scripts.Managers
 //            int toSpawn = (int) Math.Log(Wave) + 1;
 //            (int) Math.Pow(Math.E,Wave - 1)
 
-//            int toSpawn = Wave;
-            int toSpawn = 1;
+            int toSpawn = Wave;
+//            int toSpawn = 1;
 
             foreach (BossColour colour in _segmentColours)
             {
@@ -185,17 +186,28 @@ namespace Assets.Scripts.Managers
 
             foreach (BossColour colour in _megaBossColours)
             {
+                BossReward bossReward = null;
+
+                try
+                {
+                    bossReward = ShrineManager.Boss(colour).GetComponent<BossReward>();
+                }
+                catch (Exception)
+                {
+                    Debug.Log("no boss reward found");
+                }
+
                 try
                 {
                     AoeBuff bossBuff = ShrineManager.Boss(colour).GetComponent<AoeBuff>();
 
                     AoeBuff newBuff = megaBoss.AddComponent<AoeBuff>();
 
-
                     newBuff.Tag = bossBuff.Tag;
                     newBuff.Direct = bossBuff.Direct;
                     newBuff.Target = bossBuff.Target;
-                    newBuff.Modifier = bossBuff.Modifier;
+                    newBuff.Modifier = bossReward != null ? bossReward.Modifiers[ShrineManager.ShrineLevels[colour]] : bossBuff.Modifier;
+                    Debug.Log(newBuff.Modifier);
                 }
                 catch (NullReferenceException e)
                 {
@@ -204,13 +216,18 @@ namespace Assets.Scripts.Managers
 
                 try
                 {
-                    FollowerBuff bossBuff = _prefabManager.Get("follower_" + colour).GetComponent<FollowerBuff>();
+                    FollowerBuff followerBuff = _prefabManager.Get("follower_" + colour).GetComponent<FollowerBuff>();
+
+                    if (followerBuff == null)
+                    {
+                        break;
+                    }
 
                     FollowerBuff newBuff = megaBoss.AddComponent<FollowerBuff>();
 
-                    newBuff.Direct = bossBuff.Direct;
-                    newBuff.Target = bossBuff.Target;
-                    newBuff.Modifier = bossBuff.Modifier;
+                    newBuff.Direct = followerBuff.Direct;
+                    newBuff.Target = followerBuff.Target;
+                    newBuff.Modifier = bossReward != null ? bossReward.Modifiers[ShrineManager.ShrineLevels[colour]] : followerBuff.Modifier;
                 }
                 catch (Exception)
                 {
@@ -219,6 +236,8 @@ namespace Assets.Scripts.Managers
 
 
             }
+
+            _megaBossColours.Clear();
         }
 
         public AreaSpawner RandomSpawner()

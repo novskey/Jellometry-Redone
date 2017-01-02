@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Global.Scripts;
 using Assets.Scripts.Enemies;
 using UnityEngine;
 using UnityEngine.UI;
@@ -120,8 +121,9 @@ namespace Assets.Scripts.Managers
 
         public void GameOver()
         {
-            Destroy(_player.gameObject);
             StartCoroutine(HSController.PostScores(PrefsManager.GetName(),_score));
+
+            GSAppExampleControl.Instance.LoadScene(ESceneNames.Arena);
         }
 
     }
