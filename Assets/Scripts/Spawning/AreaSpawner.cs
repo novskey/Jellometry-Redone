@@ -31,22 +31,22 @@ namespace Assets.Scripts.Spawning
             }
         }
 
-        public IEnumerator SpawnEnemies(List<BossColour> enemies)
+        public IEnumerator SpawnEnemies(Dictionary<BossColour, int> enemies)
         {
-            foreach (BossColour colour in enemies)
+            WaitForSeconds wait = new WaitForSeconds(1.5f);
+
+            foreach (KeyValuePair<BossColour, int> kv in enemies)
             {
-                for (int i = 0; i < WaveManager.Wave; i++)
+                for (int i = 0; i < kv.Value; i++)
                 {
-                    Instantiate(_prefabManager.Get("follower_" + colour),RandomPoint(),transform.rotation);
+                    Instantiate(_prefabManager.Get("follower_" + kv.Key),RandomPoint(),transform.rotation);
+
+                    if (i % 3 == 0)
+                    {
+                        yield return wait;
+                    }
                 }
             }
-
-            yield return null;
-        }
-
-        // Update is called once per frame
-        void Update () {
-
         }
 
         public Vector3 RandomPoint()
@@ -58,10 +58,9 @@ namespace Assets.Scripts.Spawning
             return new Vector3(x,1f,z);
         }
 
-
-        public void SpawnBoss(GameObject boss)
+        public GameObject SpawnBoss(GameObject boss)
         {
-            Instantiate(boss, RandomPoint(), transform.rotation);
+            return (GameObject) Instantiate(boss, RandomPoint(), transform.rotation);
         }
     }
 }

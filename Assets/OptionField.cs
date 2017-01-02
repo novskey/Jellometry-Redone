@@ -37,7 +37,7 @@ namespace Assets
                         if (Input.GetKeyDown(kcode))
                         {
                             key = kcode;
-                            Debug.Log("KeyCode down: " + kcode);
+                            //Debug.Log("KeyCode down: " + kcode);
                             break;
                         }
                     }
@@ -58,7 +58,7 @@ namespace Assets
             interactable = true;
 
             base.OnPointerClick(eventData);
-            Debug.Log("pressed me!");
+            //Debug.Log("pressed me!");
             _selected = true;
 
         }

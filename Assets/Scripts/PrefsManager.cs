@@ -39,15 +39,15 @@ namespace Assets.Scripts
         public void SaveOptions()
         {
 
-            Debug.Log(PlayerPrefs.GetString("Name"));
-            Debug.Log("saving prefernces...");
+            //Debug.Log(PlayerPrefs.GetString("Name"));
+            //Debug.Log("saving prefernces...");
             for (int i = 0; i < PrefBoxes.childCount; i++)
             {
                 if (PrefBoxes.GetChild(i).GetChild(0).GetChild(0).childCount == 3)
                 {
                     string text = PrefBoxes.GetChild(i).GetChild(0).GetChild(0).GetComponent<InputField>().text;
                     string name = PrefBoxes.GetChild(i).name;
-                    Debug.Log("setting: " + name + " to " + text);
+                    //Debug.Log("setting: " + name + " to " + text);
                     if (name != "Name")
                     {
                         PlayerPrefs.SetInt(name, (int) EnumUtils.ParseEnum<KeyCode>(text));
@@ -58,7 +58,7 @@ namespace Assets.Scripts
                     }
                 }
             }
-            Debug.Log(PlayerPrefs.GetString("Name"));
+            //Debug.Log(PlayerPrefs.GetString("Name"));
             PlayerPrefs.Save();
         }
 

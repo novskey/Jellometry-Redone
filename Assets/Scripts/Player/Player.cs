@@ -42,7 +42,7 @@ namespace Assets.Scripts.Player
         // Use this for initialization
         void Start ()
         {
-            Debug.Log(_maxHealth);
+            //Debug.Log(_maxHealth);
             if (StartWithPistol)
             {
                 var pistolObj = Instantiate(UnityEngine.Resources.Load<GameObject>("Prefabs/Weapons/pistol"));
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Player
                         else StatModifiers[modifier.Target] -= modifier.Modifier;
                         break;
                     default:
-                        Debug.Log("not accounted for");
+                        //Debug.Log("not accounted for");
                         break;
                 }
             }
@@ -112,8 +112,6 @@ namespace Assets.Scripts.Player
                 _currentHealth = (int) (_currentHealth - damage);
             }
 
-            Debug.Log("player hit");
-
             _gameManager.UpdateHealth();
         }
 
@@ -131,7 +129,7 @@ namespace Assets.Scripts.Player
         {
             if (StatModifiers[PlayerStat.HpRegen] > 0 && _canRegen && _currentHealth < _maxHealth)
             {
-                Debug.Log("Regenning health");
+                //Debug.Log("Regenning health");
                 StartCoroutine(RegenHp(1));
             }
         }
@@ -142,7 +140,7 @@ namespace Assets.Scripts.Player
             yield return new WaitForSeconds(delay);
             _currentHealth = (int) Math.Min(_currentHealth + StatModifiers[PlayerStat.HpRegen], _maxHealth);
             _gameManager.UpdateHealth();
-            Debug.Log("done!");
+            //Debug.Log("done!");
             _canRegen = true;
         }
 

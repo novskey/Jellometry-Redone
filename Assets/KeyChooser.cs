@@ -8,7 +8,7 @@ namespace Assets
 
         void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("you pressed me!");
+            //Debug.Log("you pressed me!");
         }
     }
 }

@@ -29,7 +29,7 @@ public class HSController : MonoBehaviour
         string post_url = addScoreURL + "playername=" + WWW.EscapeURL(name) + "&score=" +
                           score + "&hash=" + hash;
 
-        Debug.Log(post_url);
+        //Debug.Log(post_url);
         // Post the URL to the site and create a download object to get the result.
         WWW hs_post = new WWW(post_url);
         yield return hs_post; // Wait until the download is done
@@ -72,7 +72,7 @@ public class HSController : MonoBehaviour
         CoroutineWithData cd = new CoroutineWithData(this, GetScores( ) );
         yield return cd.coroutine;
         GameObject.Find("Score List").GetComponent<HighScoreLoader>().DisplayScores((string[][]) cd.result);
-        Debug.Log("result is " + cd.result);  //  'success' or 'fail'
+        //Debug.Log("result is " + cd.result);  //  'success' or 'fail'
     }
 
 }

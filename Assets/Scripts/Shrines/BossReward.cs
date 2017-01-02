@@ -32,11 +32,11 @@ namespace Assets.Scripts.Shrines
 
         public void Activate()
         {
-            Debug.Log("boss colour: " + GetComponent<BossHealth>().Colour);
+            //Debug.Log("boss colour: " + GetComponent<BossHealth>().Colour);
             int level = _shrineManager.ShrineLevel(GetComponent<BossHealth>().Colour);
 
 
-            Debug.Log(transform + " activating at level: " + level);
+            //Debug.Log(transform + " activating at level: " + level);
 
             if (level > 0)
             {
@@ -48,7 +48,8 @@ namespace Assets.Scripts.Shrines
             }
             _player.UpdateModifier(_mod,true);
 
-            GameObject.Find("ShrineManager").GetComponent<ShrineManager>().ShrineLevels[GetComponent<BossHealth>().Colour]++;
+//            GameObject.Find("ShrineManager").GetComponent<ShrineManager>().ShrineLevels[GetComponent<BossHealth>().Colour]++;
+            ShrineManager.ShrineLevels[GetComponent<BossHealth>().Colour]++;
         }
     }
 }

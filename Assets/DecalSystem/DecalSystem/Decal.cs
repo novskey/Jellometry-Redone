@@ -55,18 +55,22 @@ namespace Assets.DecalSystem.DecalSystem
         }
 
         // Update is called once per frame
-        void Update() {
-            // Only rebuild mesh when scaling
-            //bool hasChanged = oldMatrix != transform.localToWorldMatrix;
-            bool hasChanged = _oldScale != transform.localScale;
-            //oldMatrix = transform.localToWorldMatrix;
-            _oldScale = transform.localScale;
-		
-		
-            if(hasChanged) {
-                BuildDecal( this );
-            }
-
+//        void Update() {
+//            // Only rebuild mesh when scaling
+//            //bool hasChanged = oldMatrix != transform.localToWorldMatrix;
+//            bool hasChanged = _oldScale != transform.localScale;
+//            //oldMatrix = transform.localToWorldMatrix;
+//            _oldScale = transform.localScale;
+//
+//
+//            if(hasChanged) {
+//                BuildDecal( this );
+//            }
+//
+//        }
+        void Start()
+        {
+            BuildDecal(this);
         }
 
         public void BuildDecal(Decal decal) {

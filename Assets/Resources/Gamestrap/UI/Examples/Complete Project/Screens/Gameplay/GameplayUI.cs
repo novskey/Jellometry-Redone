@@ -43,7 +43,7 @@ namespace Assets.Resources.Gamestrap.UI.Examples.Complete_Project.Screens.Gamepl
             {
                 if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(PrefsManager.GetKeyCode("Pause")))
                 {
-                    Debug.Log("game paused?: " + Pause);
+                    //Debug.Log("game paused?: " + Pause);
 
                     Pause = !Pause;
                 }

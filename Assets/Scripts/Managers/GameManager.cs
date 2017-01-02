@@ -22,7 +22,8 @@ namespace Assets.Scripts.Managers
         private static Dictionary<EnemyType, float> _enemyScores = new Dictionary<EnemyType, float>
         {
             {EnemyType.Grunt, 20},
-            {EnemyType.Boss, 100}
+            {EnemyType.Boss, 100},
+            {EnemyType.MegaBoss, 250}
         };
 
         private WaveManager _waveManager;
@@ -33,7 +34,7 @@ namespace Assets.Scripts.Managers
             _waveManager = GameObject.Find("WaveManager").GetComponent<WaveManager>();
             _waveManager.WaveSetup();
 
-            Debug.Log(PlayerPrefs.GetString("Name"));
+            //Debug.Log(PlayerPrefs.GetString("Name"));
         }
 
         private void UpdateTime()
@@ -46,11 +47,6 @@ namespace Assets.Scripts.Managers
             TimeText.text = minutes + ":" + seconds;
         }
 
-        // Update is called once per frame
-        void Update () {
-
-        }
-
         private void FixedUpdate()
         {
             if (_gamestarted)
@@ -61,7 +57,7 @@ namespace Assets.Scripts.Managers
 
         public void UpdateHealth()
         {
-            Debug.Log(_player);
+            //Debug.Log(_player);
             HealthText.text = _player.Health().ToString();
         }
 
@@ -88,7 +84,7 @@ namespace Assets.Scripts.Managers
                     break;
             }
 
-            Debug.Log("Player killed a: " + type + " worth " + points);
+            //Debug.Log("Player killed a: " + type + " worth " + points);
 
             _score += (int) (points * _player.ScoreMultiplier());
             UpdateScore();
@@ -98,11 +94,11 @@ namespace Assets.Scripts.Managers
         {
             int points = (int) (_enemyScores[enemyInfo.GetType()] * (enemyInfo.Buffs + 1));
 
-            Debug.Log(enemyInfo.Buffs);
+            //Debug.Log(enemyInfo.Buffs);
             _waveManager.EnemyKilled();
 
             points = (int) (points* _player.ScoreMultiplier());
-            Debug.Log("Player killed a: " + enemyInfo.GetType() + " worth " + points);
+            //Debug.Log("Player killed a: " + enemyInfo.GetType() + " worth " + points);
 
             _score += points;
             UpdateScore();

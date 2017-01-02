@@ -8,7 +8,7 @@ namespace Assets.Scripts.Managers
     public class ShrineManager : MonoBehaviour
     {
 
-        public Dictionary<BossColour, int> ShrineLevels = new Dictionary<BossColour, int>
+        public static Dictionary<BossColour, int> ShrineLevels = new Dictionary<BossColour, int>
         {
             {BossColour.Yellow, 0},
             {BossColour.Green, 0},
@@ -66,7 +66,7 @@ namespace Assets.Scripts.Managers
             for (int i = 0; i < 300; i++)
             {
                 shrine.transform.Translate(0,0.1f,0);
-                yield return null;
+                yield return 0f;
             }
 
             Destroy(shrine);
@@ -100,6 +100,30 @@ namespace Assets.Scripts.Managers
         {
             foreach (GameObject o in GameObject.FindGameObjectsWithTag("Start Shrine"))
                 Destroy(o);
+        }
+
+        public GameObject[] ShrineBosses()
+        {
+            List<GameObject> bosses = new List<GameObject>();
+            foreach (GameObject shrineObject in _shrineObjects)
+            {
+                bosses.Add(shrineObject.GetComponent<BossShrine>().Boss);
+            }
+
+            return bosses.ToArray();
+        }
+
+        public static GameObject Boss(BossColour colour)
+        {
+            foreach (GameObject shrineObject in _shrineObjects)
+            {
+                if (shrineObject.GetComponent<BossShrine>().Colour == colour)
+                {
+                    return shrineObject.GetComponent<BossShrine>().Boss;
+                }
+            }
+
+            return new GameObject();
         }
     }
 }

@@ -17,6 +17,7 @@
     {
         Tank,
         Grunt,
-        Boss
+        Boss,
+        MegaBoss
     }
 }

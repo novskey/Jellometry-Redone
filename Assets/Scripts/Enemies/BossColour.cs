@@ -9,5 +9,6 @@
     Orange,
     Red,
     Aqua,
-    DarkGreen
+    DarkGreen,
+    Mega
 }

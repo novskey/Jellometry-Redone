@@ -53,7 +53,7 @@ namespace Assets.Scripts.Enemies
 
         public virtual void Die()
         {
-            Debug.Log("I died! I was type: " + GetComponent<IEnemy>().GetType());
+            //Debug.Log("I died! I was type: " + GetComponent<IEnemy>().GetType());
             _gameManager.EnemyKilled(GetComponent<IEnemy>());
             Destroy(gameObject);
         }
@@ -65,7 +65,7 @@ namespace Assets.Scripts.Enemies
                 if (add)
                 {
                     StatModifiers[modifier.Target] += modifier.Modifier;
-                    Debug.Log(_enemy);
+                    //Debug.Log(_enemy);
                     _enemy.Buffs++;
                 }
                 else
@@ -103,7 +103,7 @@ namespace Assets.Scripts.Enemies
                         }
                         break;
                     default:
-                        Debug.Log("not accounted for");
+                        //Debug.Log("not accounted for");
                         break;
                 }
             }
@@ -112,35 +112,42 @@ namespace Assets.Scripts.Enemies
 
         private void UpdateStats()
         {
-            Debug.Log(_enemy.Speed);
+            //Debug.Log(_enemy.Speed);
             _enemy.Speed = _enemy.BaseSpeed * StatModifiers[PlayerStat.Speed];
-            Debug.Log(_enemy.Speed);
+            //Debug.Log(_enemy.Speed);
 //        Weapon.Damage = Weapon.BaseDamage * StatModifiers[PlayerStat.Damage];
 //        Weapon.FireDelay = Weapon.BaseDelay / StatModifiers[PlayerStat.Attackspeed];
-            Debug.Log(_enemy.Damage);
+            //Debug.Log(_enemy.Damage);
             _enemy.Damage = _enemy.BaseDamage * StatModifiers[PlayerStat.Damage];
-            Debug.Log(_enemy.Damage);
-//        Debug.Log(_enemy.Damage);
+            //Debug.Log(_enemy.Damage);
+//        //Debug.Log(_enemy.Damage);
 //        if (Weapon.Velocity != 0)
 //        {
 //            Weapon.Velocity = Weapon.BaseVelocity * StatModifiers[PlayerStat.ProjectileSpeed];
 //        }
-            Debug.Log(_currentHealth);
+            //Debug.Log(_currentHealth);
             float healthPercentage = _currentHealth / _maxHealth ;
-            Debug.Log(_maxHealth);
-            Debug.Log(healthPercentage);
+            //Debug.Log(_maxHealth);
+            //Debug.Log(healthPercentage);
             _maxHealth = BaseHealth * StatModifiers[PlayerStat.Hp];
             _currentHealth = healthPercentage * _maxHealth;
-            Debug.Log(_currentHealth);
+            //Debug.Log(_currentHealth);
 
         }
 
         void FixedUpdate()
         {
-            if (StatModifiers[PlayerStat.HpRegen] > 0 && _canRegen && _currentHealth < _maxHealth)
+            try
             {
-                Debug.Log("Regenning health");
-                StartCoroutine(RegenHp(1));
+                if (StatModifiers[PlayerStat.HpRegen] > 0 && _canRegen && _currentHealth < _maxHealth)
+                {
+                    //Debug.Log("Regenning health");
+                    StartCoroutine(RegenHp(1));
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log("im fucking up: " + gameObject);
             }
         }
 
@@ -150,7 +157,7 @@ namespace Assets.Scripts.Enemies
             yield return new WaitForSeconds(delay);
             _currentHealth = Math.Min(_currentHealth + StatModifiers[PlayerStat.HpRegen], _maxHealth);
             _gameManager.UpdateHealth();
-            Debug.Log("done!");
+            //Debug.Log("done!");
             _canRegen = true;
         }
 

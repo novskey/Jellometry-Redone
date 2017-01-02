@@ -1,17 +1,23 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Enemies;
 using Assets.Scripts.Enemies.Bosses;
 using Assets.Scripts.Pickups.Structure;
 using Assets.Scripts.Spawning;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Managers
 {
     public class WaveManager : MonoBehaviour
     {
         public static int Wave = 0;
+        public static int Segment = 1;
+        public static int Group = 1;
+
         private AreaSpawner[] _spawners;
 
         public Text WaveText;
@@ -30,8 +36,18 @@ namespace Assets.Scripts.Managers
 
         private Mod _earlyStartMod = new Mod(PlayerStat.ScoreEarned, 0.5f, "multiplier");
 
+        private int segmentSize = 3;
+
+        private int _megaBossSegment = 2;
+
+        private HashSet<BossColour> _megaBossColours = new HashSet<BossColour>();
+
+        private GameObject _normalBoss;
+        private GameObject _megaBoss;
+
         // Use this for initialization
-        void Start () {
+        void Start()
+        {
 
             GameObject[] spawnZones = GameObject.FindGameObjectsWithTag("SpawnZone");
 
@@ -45,12 +61,16 @@ namespace Assets.Scripts.Managers
             {
                 _spawners[i] = spawnZones[i].GetComponent<AreaSpawner>();
             }
+
+            _normalBoss = _prefabManager.Get("Normal Boss");
+
+            _megaBoss = _prefabManager.Get("Mega Boss");
         }
 
         public void SummonBoss(GameObject boss)
         {
             _segmentBosses.Add(boss);
-            Debug.Log("added " + boss + " to next segment");
+            ////Debug.Log("added " + boss + " to next segment");
         }
 
         public void StartSegment()
@@ -63,18 +83,21 @@ namespace Assets.Scripts.Managers
             }
 
 
-            _segmentBosses.Add(_prefabManager.Get("Normal Boss"));
-
             foreach (GameObject nextSegmentBoss in _segmentBosses)
             {
-                Debug.Log(nextSegmentBoss);
+                //Debug.Log(nextSegmentBoss);
                 BossColour colour = nextSegmentBoss.GetComponent<BossHealth>().Colour;
 
                 _segmentColours.Add(colour);
+                _megaBossColours.Add(colour);
             }
 
 
+            _segmentBosses.Add(_normalBoss);
+            _segmentColours.Add(BossColour.Normal);
 
+            //Debug.Log(_segmentBosses.Count);
+            WaveSetup();
             StartWave();
 
             _shrineManager.ClearShrines();
@@ -82,14 +105,18 @@ namespace Assets.Scripts.Managers
 
         public void StartWave()
         {
-            Debug.Log("start wave");
+            //Debug.Log("start wave");
 
             Wave++;
+            Debug.Log("wave: " + Wave);
+            Debug.Log("group: " + Group);
+            Debug.Log("segment size: " + segmentSize);
+            Debug.Log("segment: " + Segment);
+            WaveText.text = Wave - (Segment - 1)*segmentSize + " / " + segmentSize;
 
-            WaveText.text = Wave.ToString();
 
+//            WaveSetup();
 
-            WaveSetup();
 
             SpawnWave();
 
@@ -97,23 +124,45 @@ namespace Assets.Scripts.Managers
 
         private void SpawnWave()
         {
-            Debug.Log("spawning wave: " + Wave);
+            //Debug.Log("spawning wave: " + Wave);
 
+
+            Dictionary<BossColour, int> enemyDict = new Dictionary<BossColour, int>();
+
+//            int toSpawn = (int) Math.Log(Wave) + 1;
+//            (int) Math.Pow(Math.E,Wave - 1)
+
+//            int toSpawn = Wave;
+            int toSpawn = 1;
+
+            foreach (BossColour colour in _segmentColours)
+            {
+//                enemyDict.Add(colour, );
+                enemyDict.Add(colour, toSpawn);
+                Debug.Log(enemyDict[colour]);
+            }
 
             foreach (AreaSpawner areaSpawner in _spawners)
             {
-                StartCoroutine(areaSpawner.SpawnEnemies(_segmentColours));
+                StartCoroutine(areaSpawner.SpawnEnemies(enemyDict));
             }
 
-            RemainingEnemies += Wave * _spawners.Length * _segmentColours.Count;
+            RemainingEnemies += toSpawn * _segmentColours.Count     * _spawners.Length;
 
-            if (_segmentBosses.Count != 0 && Wave % 5 == 0)
+            Debug.Log(Wave + " , " + segmentSize);
+
+            if (Wave % segmentSize == 0)
             {
-                SpawnBosses();
                 RemainingEnemies += _segmentBosses.Count;
-            }
-            Debug.Log(RemainingEnemies);
+                SpawnBosses();
 
+                if (Wave != 0 && Wave % (segmentSize * _megaBossSegment) == 0)
+                {
+                    SpawnMegaBoss();
+                }
+            }
+
+            Debug.Log(RemainingEnemies);
         }
 
         public void SpawnBosses()
@@ -124,6 +173,52 @@ namespace Assets.Scripts.Managers
             }
 
             _segmentBosses.Clear();
+            _segmentColours.Clear();
+        }
+
+
+        private void SpawnMegaBoss()
+        {
+            GameObject megaBoss = RandomSpawner().SpawnBoss(_megaBoss);
+
+            megaBoss.GetComponent<Boss>().Type = EnemyType.MegaBoss;
+
+            foreach (BossColour colour in _megaBossColours)
+            {
+                try
+                {
+                    AoeBuff bossBuff = ShrineManager.Boss(colour).GetComponent<AoeBuff>();
+
+                    AoeBuff newBuff = megaBoss.AddComponent<AoeBuff>();
+
+
+                    newBuff.Tag = bossBuff.Tag;
+                    newBuff.Direct = bossBuff.Direct;
+                    newBuff.Target = bossBuff.Target;
+                    newBuff.Modifier = bossBuff.Modifier;
+                }
+                catch (NullReferenceException e)
+                {
+                    Debug.Log("no AOEBuff found on boss");
+                }
+
+                try
+                {
+                    FollowerBuff bossBuff = _prefabManager.Get("follower_" + colour).GetComponent<FollowerBuff>();
+
+                    FollowerBuff newBuff = megaBoss.AddComponent<FollowerBuff>();
+
+                    newBuff.Direct = bossBuff.Direct;
+                    newBuff.Target = bossBuff.Target;
+                    newBuff.Modifier = bossBuff.Modifier;
+                }
+                catch (Exception)
+                {
+                    Debug.Log("no followerbuff for boss colour");
+                }
+
+
+            }
         }
 
         public AreaSpawner RandomSpawner()
@@ -133,37 +228,64 @@ namespace Assets.Scripts.Managers
 
         public void WaveSetup()
         {
-            if (Wave % 5 == 0)
+
+            _shrineManager.ClearStartShrine();
+            _shrineManager.SpawnShrines();
+
+        }
+
+        public void EnemyKilled()
+        {
+            RemainingEnemies--;
+            //Debug.Log(RemainingEnemies);
+            if (RemainingEnemies == 0)
             {
-                _shrineManager.SpawnShrines();
+                EndWave();
+            }
+        }
+
+        public void EndWave()
+        {
+            Debug.Log(Wave - (Segment - 1)*segmentSize);
+            Debug.Log("ended wave: " + Wave);
+            if ((Wave + 1) % segmentSize == 0)
+            {
+                Debug.Log("final wave of segment");
+                _shrineManager.ClearStartShrine();
             }
             else
             {
                 _shrineManager.ClearStartShrine();
                 _shrineManager.PlaceStartShrine();
             }
-        }
 
-        public void EnemyKilled()
-        {
-            RemainingEnemies--;
-            Debug.Log(RemainingEnemies);
-            if (RemainingEnemies == 0)
+            if (Wave % segmentSize == 0)
+            {
+                Debug.Log("segment ended");
+                Segment++;
+                _segmentColours.Clear();
+                WaveSetup();
+            }
+            else
             {
                 StartWave();
             }
+
+            Debug.Log("new wave: " + Wave);
         }
 
         public void StartShrine()
         {
-            if (Wave % 5 == 0)
+            Debug.Log("Start shrine hit");
+            Debug.Log(Wave - (Segment - 1)*segmentSize);
+            if (Wave - (Segment - 1)*segmentSize == 0)
             {
                 StartSegment();
             }
             else
             {
                 StartCoroutine(EarlyStartBuff());
-                StartWave();
+                EndWave();
             }
         }
 

@@ -29,7 +29,7 @@ namespace Assets.Scripts
             foreach (string[] highScore in highScores)
             {
                 string name = highScore[0];
-                Debug.Log(name);
+                //Debug.Log(name);
 
                 string score = highScore[1];
                 string time = highScore[2].Substring(0,highScore[2].IndexOf(" "));
