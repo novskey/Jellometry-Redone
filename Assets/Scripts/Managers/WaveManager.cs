@@ -209,7 +209,7 @@ namespace Assets.Scripts.Managers
                     newBuff.Modifier = bossReward != null ? bossReward.Modifiers[ShrineManager.ShrineLevels[colour]] : bossBuff.Modifier;
                     Debug.Log(newBuff.Modifier);
                 }
-                catch (NullReferenceException e)
+                catch (NullReferenceException)
                 {
                     Debug.Log("no AOEBuff found on boss");
                 }

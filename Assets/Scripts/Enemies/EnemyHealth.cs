@@ -145,7 +145,7 @@ namespace Assets.Scripts.Enemies
                     StartCoroutine(RegenHp(1));
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Debug.Log("im fucking up: " + gameObject);
             }

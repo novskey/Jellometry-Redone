@@ -12,7 +12,7 @@ namespace Assets.Scripts.Enemies
             {
                 GetComponent<BossReward>().Activate();
             }
-            catch (NullReferenceException e)
+            catch (Exception)
             {
                 //Debug.Log("no boss reward component");
             }
